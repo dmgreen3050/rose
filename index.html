@@ -1,19 +1,34 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width-devuce-width, initial-scale=1"/>
-  <title>Rosemarie's TV</title>
-  <style>
-    
-  </style>
-</head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rosemary's TV</title>
+<link rel="stylesheet" href="style.css" />
+  </head>
+
 <body>
-  <h1>Rosemarie's Retro TV</h1>
-  <p>Play thus to watch some of her favorites</p>
-  <div class="tv-frame">
-  <video id="tv" width="480" controls autoplay>
-    <source src="https://youtu.be/zpnWCKLA4_U?si=DfH30qy8OaE_7LRU" type=?video/mp4">
-  </video>
+  <!--tv frame-->
+  <h1>Rosemary's Retro TV</h1>
+  <p>Play this to watch some of her favorites</p>
+<div class="tv-wrapper">
+  <img src=" " alt="retro tv" class="tv-frame"/>
+  <div class="screen">
+    <iframe src="https://www.youtube.com/embed/d6PdKxwY_RE?si=7JA-gL6W2gQnldst"
+      allowfullscreen
+      title="Golden Girls"
+      frameborder="0"
+      allow="autoplay; encrypted-media"
+      class="video">
+    </iframe>
   </div>
+</div>
+<!--remote buttons-->
+  <div class="remote">
+    <button onclick="switchChannel(0)">Golden Girls</button>
+    <button onclick="switchChannel(1)">Lifetime</button>
+    <button onclick="switchChannel(2)">Music</button>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
