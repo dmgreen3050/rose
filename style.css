@@ -1,19 +1,19 @@
 
-body{
+body {
   font-family: sans-serif;
   text-align: center;
   background-color:black;
 }
-.tv-wrapper{
+.tv-wrapper {
   position:relative;
   width:593px;
   margin: 0 auto;
 }
-.tv-frame{
+.tv-frame {
   width:100%
   display:block;
 }
-.screen{
+.screen {
   position:absolute;
   top:85px;
   left:80px;
@@ -21,7 +21,7 @@ body{
   height:320px;
   overflow:hidden;
 }
-.video{
+.video {
   width:100%;
   height:100%;
   border:none;
