@@ -17,11 +17,12 @@ body {
 }
 .screen {
   position:absolute;
-  top:14.3%;
-  left:13.4%;
-  width:73.2%;
-  height:55%;
+  top:2%;
+  left:20.7%;
+  width:60.5%;
+  height:72.8%;
   overflow:hidden;
+  
 }
 .video {
   width:100%;
