@@ -1,12 +1,11 @@
 // List of Youtube and Internet Archive Videos
 const channels = [
-  "https://www.youtube.com/embed/videoseries?si=dQlSqRd1aFZz8JDy&amp;list=PLnJVRTZlANm1EyaREpsWbmXRd34Y66yWV?enablejsapi=1&controls=0&rel=0&modestbranding=1&autoplay=1" //Golden Girls
-"https://www.youtube.com/embed/videoseries?si=ECvqzona23O3jDo7&amp;list=PLnJVRTZlANm28rG20hiPLXHOievQ8O3Ls?enablejsapi=1&controls=0&rel=0&modestbranding=1&autoplay=1" //Christmas
-"https://www.youtube.com/embed/videoseries?si=mSb725kOM5Rm_ajC&amp;list=PLiquKSP6s-eFZj2HF0fhw41D5Argpn3_G?enablejsapi=1&controls=0&rel=0&modestbranding=1&autoplay=1" //Lifetime
-"https://www.youtube.com/embed/videoseries?si=3whAWtFxipP-ydzj&amp;list=PL7Sv7aQs2p0V1FlyUXXbVGekKW65j5QRq?enablejsapi=1&controls=0&rel=0&modestbranding=1&autoplay=1" //Christmas Music
-"https://www.youtube.com/embed/videoseries?si=8QsYISjNeoUTHOQl&amp;list=PLnJVRTZlANm3L7JDiPnjIrP2zxEgbdlLJ?enablejsapi=1&controls=0&rel=0&modestbranding=1&autoplay=1" //Music
+  "https://www.youtube.com/embed/videoseries?si=dQlSqRd1aFZz8JDy&list=PLnJVRTZlANm1EyaREpsWbmXRd34Y66yWV&enablejsapi=1&controls=0&rel=0&modestbranding=1&autoplay=1", //Golden Girls
+  "https://www.youtube.com/embed/videoseries?si=ECvqzona23O3jDo7&list=PLnJVRTZlANm28rG20hiPLXHOievQ8O3Ls&enablejsapi=1&controls=0&rel=0&modestbranding=1&autoplay=1", //Christmas
+  "https://www.youtube.com/embed/videoseries?si=mSb725kOM5Rm_ajC&list=PLiquKSP6s-eFZj2HF0fhw41D5Argpn3_G&enablejsapi=1&controls=0&rel=0&modestbranding=1&autoplay=1", //Lifetime
+  "https://www.youtube.com/embed/videoseries?si=3whAWtFxipP-ydzj&list=PL7Sv7aQs2p0V1FlyUXXbVGekKW65j5QRq&enablejsapi=1&controls=0&rel=0&modestbranding=1&autoplay=1", //Christmas Music
+  "https://www.youtube.com/embed/videoseries?si=8QsYISjNeoUTHOQl&list=PLnJVRTZlANm3L7JDiPnjIrP2zxEgbdlLJ&enablejsapi=1&controls=0&rel=0&modestbranding=1&autoplay=1" //Music
 ];
-
 let currentChannel = 0;
 let isPoweredOn = false;
 const iframe = document.querySelector("iframe");
@@ -17,25 +16,25 @@ document.getElementById("powerButton").addEventListener("click" , () => {
     iframe.src=""; // Turn off
   }
   else{
-    iframe.src =channels[currentChannels]; // Turn on
+    iframe.src =channels[currentChannel]; // Turn on
   }
   isPoweredOn = !isPoweredOn;
 });
 
 // TV Channel Buttons
-document.getElementById("channelUp".addEventListener("click" , () => {
+document.getElementById("channelUp").addEventListener("click" , () => {
   if (isPoweredOn) {
     currentChannel = (currentChannel + 1) % channels.length;
     iframe.src= channels[currentChannel];
   }
 });
-document.getElementById("channelDown".addEventListener("click", () => {
+document.getElementById("channelDown").addEventListener("click", () => {
   if (isPoweredOn) {
     currentChannel = (currentChannel - 1 + channels.length) % channels.length;
     iframe.src=channels[currentChannel];
   }
 });
 // Volume buttons 
-document.getElementbyId("volumeUp".addEventListener("click", () => {
+document.getElementById("volumeUp").addEventListener("click", () => {
   if (isPoweredOn) {
     
