@@ -15,11 +15,10 @@ body {
 }
 .screen {
   position:absolute;
-  top:85px;
-  left:50px;
-  right:50px;
-  width:358px;
-  height:285px;
+  top:72px;
+  left:70px;
+  width:452px;
+  height:338px;
   overflow:hidden;
 }
 .video {
