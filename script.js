@@ -9,6 +9,12 @@ const channels = [
 let currentChannel = 0;
 let isPoweredOn = false;
 const iframe = document.querySelector("iframe");
+function switchChannel(index) {
+  if (isPoweredOn) {
+    currentChannel = index % channels.length;
+    iframe.src = channels[currentChannel];
+  }
+}
 
 // Power
 document.getElementById("powerButton").addEventListener("click" , () => {
