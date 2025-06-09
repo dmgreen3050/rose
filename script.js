@@ -42,4 +42,12 @@ document.getElementById("channelDown").addEventListener("click", () => {
   }
 });
 
+document.getElementById("volumeUp").addEventListener("click", () => {
+  console.log("Volume Up clicked (not implemented yet)");
+});
+document.getElementById("volumeDown").addEventListener("click", () => {
+  console.log("Volume Down clicked (not implemented yet)");
+});
+
+
     
