@@ -14,14 +14,17 @@ body {
   width:100%;
   height:auto;
   display:block;
+  position:relative;
+  z-index:2;
 }
 .screen {
   position:absolute;
-  top:2%;
-  left:20.7%;
+  top:6%;
+  left:21.2%;
   width:60.5%;
   height:72.8%;
   overflow:hidden;
+  z-index:1;
   
 }
 .video {
