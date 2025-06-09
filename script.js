@@ -15,6 +15,7 @@ function switchChannel(index) {
     iframe.src = channels[currentChannel];
   }
 }
+window.switchChannel = switchChannel;
 
 // Power
 document.getElementById("powerButton").addEventListener("click" , () => {
