@@ -41,7 +41,5 @@ document.getElementById("channelDown").addEventListener("click", () => {
     iframe.src=channels[currentChannel];
   }
 });
-// Volume buttons 
-document.getElementById("volumeUp").addEventListener("click", () => {
-  if (isPoweredOn) {
+
     
