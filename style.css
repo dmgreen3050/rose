@@ -16,7 +16,8 @@ body {
 .screen {
   position:absolute;
   top:85px;
-  left:80px;
+  left:50px;
+  right:50px;
   width:358px;
   height:266px;
   overflow:hidden;
