@@ -25,6 +25,7 @@ body {
   height:72.8%;
   overflow:hidden;
   z-index:1;
+  background:black;
   
 }
 .video {
@@ -35,16 +36,21 @@ body {
 
 #powerButton{
   position:absolute;
-  top:65%;
-  left:48;
+  top:85%;
+  left:87%;
   width:40px;
   height:40px;
   background:transparent;
   border:none;
   cursor:pointer;
   z-index:3;
+  box-shadow: 0 0 10px #ff0000;
 }
-#powerButton: hover{
-  outline: 2px solid lime;
-  border-radius:50%;
+.remote{
+  margin-top:20px;
 }
+.remote button{
+  margin: 0 10px;
+  padding: 10px 20px;
+  font-size:16px;
+  cursor:pointer;
