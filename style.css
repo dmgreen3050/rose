@@ -32,3 +32,19 @@ body {
   height:100%;
   border:none;
 }
+
+#powerButton{
+  position:absolute;
+  top:65%;
+  left:48;
+  width:40px;
+  height:40px;
+  background:transparent;
+  border:none;
+  cursor:pointer;
+  z-index:3;
+}
+#powerButton: hover{
+  outline: 2px solid lime;
+  border-radius:50%;
+}
