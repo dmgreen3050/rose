@@ -7,19 +7,20 @@ body {
 .tv-wrapper {
   position:relative;
   width: 100%; 
-  max-width: 800px;
+  max-width: 600px;
   margin: 0 auto;
 }
 .tv-frame {
   width:100%;
+  height:auto;
   display:block;
 }
 .screen {
   position:absolute;
-  top:63px;
-  left:64px;
-  width:467px;
-  height:340px;
+  top:14.3%;
+  left:13.4%;
+  width:73.2%;
+  height:55%;
   overflow:hidden;
 }
 .video {
