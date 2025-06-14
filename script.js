@@ -11,7 +11,7 @@ const channels = [
 let currentChannel = 0;
 let isPoweredOn = false;
 let player = null;
-let playerReady = false;
+let playerReady = false;  // NEW: Track if player is ready
 
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('tvPlayer', {
@@ -31,7 +31,7 @@ function onYouTubeIframeAPIReady() {
 
 function onPlayerReady(event) {
   console.log("YouTube Player Ready");
-  playerReady = true;
+  playerReady = true;  // SET READY FLAG
 }
 
 function onPlayerError(event) {
@@ -46,41 +46,22 @@ function loadChannel(index) {
   if (!isPoweredOn) return;
   currentChannel = index % channels.length;
   const url = channels[currentChannel];
-
+  
   if (isYouTubeURL(url)) {
     if (player && playerReady && player.loadPlaylist) {
       if (url.includes("list=")) {
-        // Extract playlist ID
         const listId = new URL(url).searchParams.get("list");
-        if (listId) {
-          player.loadPlaylist({
-            listType: 'playlist',
-            list: listId,
-            index: 0,
-            startSeconds: 0
-          });
-          player.playVideo();
-        } else {
-          console.warn("Playlist ID not found in URL");
-          player.cueVideoByUrl(url);
-        }
+        player.loadPlaylist({list: listId});
+        player.playVideo();
       } else {
         const videoId = getVideoIdFromUrl(url);
-        if (videoId) {
-          player.loadVideoById(videoId);
-        } else {
-          console.warn("Video ID not found, loading URL in iframe src fallback");
-          document.getElementById('tvPlayer').src = url + "&autoplay=1&mute=1&controls=0&rel=0&modestbranding=1";
-        }
+        player.loadVideoById(videoId);
       }
     } else {
-      // Fallback if player not ready yet
       document.getElementById('tvPlayer').src = url + "&autoplay=1&mute=1&controls=0&rel=0&modestbranding=1";
     }
   } else {
-    // Non-YouTube URL: show a warning or open in new tab
-    alert("Sorry, this channel is not supported inside the player. Opening in a new tab.");
-    window.open(url, "_blank");
+    document.getElementById('tvPlayer').src = url;
   }
 }
 
@@ -117,7 +98,7 @@ function volumeDown() {
 
 function muteToggle() {
   if (!isPoweredOn || !player || !playerReady) {
-    console.warn("Player not ready for mute toggle");
+    console.log("Player not ready for mute toggle");
     return;
   }
   if (player.isMuted()) {
@@ -127,44 +108,41 @@ function muteToggle() {
   }
 }
 
-// Attach event listeners after DOM loads
 window.addEventListener('DOMContentLoaded', () => {
   document.getElementById("powerButton").addEventListener("click", powerToggle);
   document.getElementById("powerRemote").addEventListener("click", powerToggle);
-
+  
   document.getElementById("channelUp").addEventListener("click", () => {
-    if (!isPoweredOn) return;
+    if (!isPoweredOn || !playerReady) return;
     currentChannel = (currentChannel + 1) % channels.length;
     loadChannel(currentChannel);
   });
   document.getElementById("channelUpRemote").addEventListener("click", () => {
-    if (!isPoweredOn) return;
+    if (!isPoweredOn || !playerReady) return;
     currentChannel = (currentChannel + 1) % channels.length;
     loadChannel(currentChannel);
   });
-
+  
   document.getElementById("channelDown").addEventListener("click", () => {
-    if (!isPoweredOn) return;
+    if (!isPoweredOn || !playerReady) return;
     currentChannel = (currentChannel - 1 + channels.length) % channels.length;
     loadChannel(currentChannel);
   });
   document.getElementById("channelDownRemote").addEventListener("click", () => {
-    if (!isPoweredOn) return;
+    if (!isPoweredOn || !playerReady) return;
     currentChannel = (currentChannel - 1 + channels.length) % channels.length;
     loadChannel(currentChannel);
   });
-
+  
   document.getElementById("volumeUp").addEventListener("click", volumeUp);
   document.getElementById("volumeUpRemote").addEventListener("click", volumeUp);
-
   document.getElementById("volumeDown").addEventListener("click", volumeDown);
   document.getElementById("volumeDownRemote").addEventListener("click", volumeDown);
-
   document.getElementById("muteRemote").addEventListener("click", muteToggle);
 });
 
 // Make switchChannel globally accessible for inline buttons
 window.switchChannel = function(index) {
-  if (!isPoweredOn) return;
+  if (!isPoweredOn || !playerReady) return;
   loadChannel(index);
 };
