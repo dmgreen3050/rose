@@ -49,10 +49,11 @@ function powerToggle() {
   }
 }
 
-// Attach your event listeners
+// Event listeners for power buttons
 document.getElementById("powerButton").addEventListener("click", powerToggle);
 document.getElementById("powerRemote").addEventListener("click", powerToggle);
 
+// Event listeners for channel up
 document.getElementById("channelUp").addEventListener("click", () => {
   if (!isPoweredOn) return;
   currentChannel = (currentChannel + 1) % channels.length;
@@ -64,7 +65,20 @@ document.getElementById("channelUpRemote").addEventListener("click", () => {
   loadChannel(currentChannel);
 });
 
+// Event listeners for channel down
 document.getElementById("channelDown").addEventListener("click", () => {
   if (!isPoweredOn) return;
   currentChannel = (currentChannel - 1 + channels.length) % channels.length;
-  loadChannel(currentChannel)
+  loadChannel(currentChannel);
+});
+document.getElementById("channelDownRemote").addEventListener("click", () => {
+  if (!isPoweredOn) return;
+  currentChannel = (currentChannel - 1 + channels.length) % channels.length;
+  loadChannel(currentChannel);
+});
+
+// Make switchChannel globally accessible so inline HTML calls work
+window.switchChannel = function(index) {
+  if (!isPoweredOn) return;
+  loadChannel(index);
+};
