@@ -115,12 +115,20 @@ p{
 .remote{
   margin-top:20px;
 }
-.remote-buttons{
+
+  .remote-buttons{
   margin: 0 10px;
   padding: 10px 20px;
   font-size:16px;
   cursor:pointer;
-  background:gray;
+  background:#4a4a4a;
   border:none;
+  width:150px;
+  height:200px;
+  position:absolute;
+  left:80%;
+  top:55%;
   
 }
+
+
