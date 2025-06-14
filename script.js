@@ -7,10 +7,6 @@ const channels = [
   "https://www.youtube.com/embed/videoseries?si=8QsYISjNeoUTHOQl&list=PLnJVRTZlANm3L7JDiPnjIrP2zxEgbdlLJ&enablejsapi=1&controls=0&rel=0&modestbranding=1&autoplay=1", //Music
   "https://watchseinfeld.net/",//Seinfeld
 "https://www.youtube.com/embed/5fnsIjeByxQ?si=tY-BH-shRz4MacpL&enablejsapi=1&controls=0&rel=0&modestbranding=1&autoplay=1"//Movies
-
-
-
-
 ];
 let currentChannel = 0;
 let isPoweredOn = false;
