@@ -10,7 +10,7 @@ const channels = [
 
 
 
-"
+
 ];
 let currentChannel = 0;
 let isPoweredOn = false;
