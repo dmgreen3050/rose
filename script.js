@@ -11,6 +11,7 @@ const channels = [
 let currentChannel = 0;
 let isPoweredOn = false;
 let player = null;
+let playerReady = false;
 
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('tvPlayer', {
@@ -29,8 +30,8 @@ function onYouTubeIframeAPIReady() {
 }
 
 function onPlayerReady(event) {
-  // Player is ready
   console.log("YouTube Player Ready");
+  playerReady = true;
 }
 
 function onPlayerError(event) {
@@ -45,32 +46,45 @@ function loadChannel(index) {
   if (!isPoweredOn) return;
   currentChannel = index % channels.length;
   const url = channels[currentChannel];
-  
+
   if (isYouTubeURL(url)) {
-    // Extract playlist or video id from url for API use
-    // For simplicity, just load URL into iframe src fallback if player not ready
-    if (player && player.loadPlaylist) {
-      // If it's a playlist link, load playlist
+    if (player && playerReady && player.loadPlaylist) {
       if (url.includes("list=")) {
+        // Extract playlist ID
         const listId = new URL(url).searchParams.get("list");
-        player.loadPlaylist({list: listId});
-        player.playVideo();
+        if (listId) {
+          player.loadPlaylist({
+            listType: 'playlist',
+            list: listId,
+            index: 0,
+            startSeconds: 0
+          });
+          player.playVideo();
+        } else {
+          console.warn("Playlist ID not found in URL");
+          player.cueVideoByUrl(url);
+        }
       } else {
-        // Single video id from URL
         const videoId = getVideoIdFromUrl(url);
-        player.loadVideoById(videoId);
+        if (videoId) {
+          player.loadVideoById(videoId);
+        } else {
+          console.warn("Video ID not found, loading URL in iframe src fallback");
+          document.getElementById('tvPlayer').src = url + "&autoplay=1&mute=1&controls=0&rel=0&modestbranding=1";
+        }
       }
     } else {
+      // Fallback if player not ready yet
       document.getElementById('tvPlayer').src = url + "&autoplay=1&mute=1&controls=0&rel=0&modestbranding=1";
     }
   } else {
-    // Non YouTube URL: set iframe src directly (e.g. Seinfeld)
-    document.getElementById('tvPlayer').src = url;
+    // Non-YouTube URL: show a warning or open in new tab
+    alert("Sorry, this channel is not supported inside the player. Opening in a new tab.");
+    window.open(url, "_blank");
   }
 }
 
 function getVideoIdFromUrl(url) {
-  // Simple regex to extract video id from typical YT urls
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#&?]*).*/;
   const match = url.match(regExp);
   return (match && match[2].length === 11) ? match[2] : null;
@@ -82,7 +96,7 @@ function powerToggle() {
     loadChannel(currentChannel);
   } else {
     isPoweredOn = false;
-    if (player) {
+    if (player && playerReady) {
       player.stopVideo();
     }
     document.getElementById('tvPlayer').src = "";
@@ -90,19 +104,22 @@ function powerToggle() {
 }
 
 function volumeUp() {
-  if (!isPoweredOn || !player) return;
+  if (!isPoweredOn || !player || !playerReady) return;
   const currentVol = player.getVolume();
   player.setVolume(Math.min(currentVol + 10, 100));
 }
 
 function volumeDown() {
-  if (!isPoweredOn || !player) return;
+  if (!isPoweredOn || !player || !playerReady) return;
   const currentVol = player.getVolume();
   player.setVolume(Math.max(currentVol - 10, 0));
 }
 
 function muteToggle() {
-  if (!isPoweredOn || !player) return;
+  if (!isPoweredOn || !player || !playerReady) {
+    console.warn("Player not ready for mute toggle");
+    return;
+  }
   if (player.isMuted()) {
     player.unMute();
   } else {
@@ -114,6 +131,7 @@ function muteToggle() {
 window.addEventListener('DOMContentLoaded', () => {
   document.getElementById("powerButton").addEventListener("click", powerToggle);
   document.getElementById("powerRemote").addEventListener("click", powerToggle);
+
   document.getElementById("channelUp").addEventListener("click", () => {
     if (!isPoweredOn) return;
     currentChannel = (currentChannel + 1) % channels.length;
@@ -124,6 +142,7 @@ window.addEventListener('DOMContentLoaded', () => {
     currentChannel = (currentChannel + 1) % channels.length;
     loadChannel(currentChannel);
   });
+
   document.getElementById("channelDown").addEventListener("click", () => {
     if (!isPoweredOn) return;
     currentChannel = (currentChannel - 1 + channels.length) % channels.length;
@@ -134,10 +153,13 @@ window.addEventListener('DOMContentLoaded', () => {
     currentChannel = (currentChannel - 1 + channels.length) % channels.length;
     loadChannel(currentChannel);
   });
+
   document.getElementById("volumeUp").addEventListener("click", volumeUp);
   document.getElementById("volumeUpRemote").addEventListener("click", volumeUp);
+
   document.getElementById("volumeDown").addEventListener("click", volumeDown);
   document.getElementById("volumeDownRemote").addEventListener("click", volumeDown);
+
   document.getElementById("muteRemote").addEventListener("click", muteToggle);
 });
 
