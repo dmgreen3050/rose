@@ -4,7 +4,7 @@ const channels = [
   "https://www.youtube.com/embed/videoseries?list=PLiquKSP6s-eFZj2HF0fhw41D5Argpn3_G",
   "https://www.youtube.com/embed/videoseries?list=PL7Sv7aQs2p0V1FlyUXXbVGekKW65j5QRq",
   "https://www.youtube.com/embed/videoseries?list=PLnJVRTZlANm3L7JDiPnjIrP2zxEgbdlLJ",
-  "https://watchseinfeld.net/", // Not a YouTube video
+  "https://watchseinfeld.net/", // Non-YouTube
   "https://www.youtube.com/embed/5fnsIjeByxQ"
 ];
 
@@ -31,11 +31,11 @@ function onYouTubeIframeAPIReady() {
 
 function onPlayerReady(event) {
   playerReady = true;
-  console.log("YouTube Player is ready");
+  console.log("YouTube Player ready");
 }
 
 function onPlayerError(event) {
-  console.error("YouTube Player Error:", event.data);
+  console.error("YouTube Error:", event.data);
 }
 
 function isYouTubeURL(url) {
@@ -43,26 +43,29 @@ function isYouTubeURL(url) {
 }
 
 function loadChannel(index) {
-  if (!isPoweredOn) return;
+  if (!isPoweredOn || !playerReady) return;
 
   currentChannel = index % channels.length;
   const url = channels[currentChannel];
 
+  const ytFrame = document.getElementById("tvPlayer");
+  const nonYTFrame = document.getElementById("nonYoutubePlayer");
+
   if (isYouTubeURL(url)) {
+    ytFrame.style.display = "block";
+    nonYTFrame.style.display = "none";
     const videoId = getVideoIdFromUrl(url);
     const listId = new URL(url).searchParams.get("list");
 
-    if (player && playerReady) {
-      if (listId) {
-        player.loadPlaylist({ list: listId });
-      } else {
-        player.loadVideoById(videoId);
-      }
+    if (listId) {
+      player.loadPlaylist({ list: listId });
+    } else {
+      player.loadVideoById(videoId);
     }
   } else {
-    // Non-YouTube video, load manually
-    const container = document.getElementById('tvPlayerWrapper');
-    container.innerHTML = `<iframe src="${url}" width="640" height="360" frameborder="0" allowfullscreen></iframe>`;
+    ytFrame.style.display = "none";
+    nonYTFrame.style.display = "block";
+    nonYTFrame.src = url;
   }
 }
 
@@ -72,42 +75,40 @@ function getVideoIdFromUrl(url) {
 }
 
 function powerToggle() {
-  const container = document.getElementById('tvPlayerWrapper');
+  const ytFrame = document.getElementById("tvPlayer");
+  const nonYTFrame = document.getElementById("nonYoutubePlayer");
 
   if (!isPoweredOn) {
     isPoweredOn = true;
+    ytFrame.style.display = "block";
+    nonYTFrame.style.display = "none";
     loadChannel(currentChannel);
   } else {
     isPoweredOn = false;
-    if (player && playerReady) {
-      player.stopVideo();
-    }
-    container.innerHTML = `<iframe id="tvPlayer" width="640" height="360" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen src=""></iframe>`;
-    playerReady = false;
-    onYouTubeIframeAPIReady();
+    if (player && playerReady) player.stopVideo();
+    ytFrame.style.display = "none";
+    nonYTFrame.style.display = "none";
+    nonYTFrame.src = ""; // Clear non-YT src too
   }
 }
 
 function volumeUp() {
   if (player && playerReady && isPoweredOn) {
-    const currentVol = player.getVolume();
-    player.setVolume(Math.min(currentVol + 10, 100));
+    const vol = player.getVolume();
+    player.setVolume(Math.min(vol + 10, 100));
   }
 }
 
 function volumeDown() {
   if (player && playerReady && isPoweredOn) {
-    const currentVol = player.getVolume();
-    player.setVolume(Math.max(currentVol - 10, 0));
+    const vol = player.getVolume();
+    player.setVolume(Math.max(vol - 10, 0));
   }
 }
 
 function muteToggle() {
-  if (!player || !playerReady || !isPoweredOn) return;
-  if (player.isMuted()) {
-    player.unMute();
-  } else {
-    player.mute();
+  if (player && playerReady && isPoweredOn) {
+    player.isMuted() ? player.unMute() : player.mute();
   }
 }
 
@@ -120,23 +121,13 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById("powerButton").addEventListener("click", powerToggle);
   document.getElementById("powerRemote").addEventListener("click", powerToggle);
 
-  document.getElementById("channelUp").addEventListener("click", () => {
-    if (!isPoweredOn) return;
-    switchChannel((currentChannel + 1) % channels.length);
-  });
-  document.getElementById("channelUpRemote").addEventListener("click", () => {
-    if (!isPoweredOn) return;
-    switchChannel((currentChannel + 1) % channels.length);
-  });
+  const nextChannel = () => switchChannel((currentChannel + 1) % channels.length);
+  const prevChannel = () => switchChannel((currentChannel - 1 + channels.length) % channels.length);
 
-  document.getElementById("channelDown").addEventListener("click", () => {
-    if (!isPoweredOn) return;
-    switchChannel((currentChannel - 1 + channels.length) % channels.length);
-  });
-  document.getElementById("channelDownRemote").addEventListener("click", () => {
-    if (!isPoweredOn) return;
-    switchChannel((currentChannel - 1 + channels.length) % channels.length);
-  });
+  document.getElementById("channelUp").addEventListener("click", nextChannel);
+  document.getElementById("channelUpRemote").addEventListener("click", nextChannel);
+  document.getElementById("channelDown").addEventListener("click", prevChannel);
+  document.getElementById("channelDownRemote").addEventListener("click", prevChannel);
 
   document.getElementById("volumeUp").addEventListener("click", volumeUp);
   document.getElementById("volumeUpRemote").addEventListener("click", volumeUp);
