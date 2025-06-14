@@ -4,6 +4,13 @@ body {
   text-align: center;
   background-color:black;
 }
+h1{
+  color:white;
+  
+}
+p{
+  color:white;
+}
 .tv-wrapper {
   position:relative;
   width: 100%; 
