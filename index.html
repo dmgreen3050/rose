@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Rosemary's TV</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -12,7 +12,7 @@
 
   <div class="tv-wrapper">
     <div class="screen" id="tvContainer">
-      <div id="tvPlayerWrapper">
+      <div id="tvPlayerWrapper" style="position: relative; width: 640px; height: 360px; margin: 0 auto 20px; border: 10px solid #444; box-shadow: 0 0 30px #000;">
         <iframe
           id="tvPlayer"
           width="640"
@@ -21,17 +21,29 @@
           allow="autoplay; encrypted-media"
           allowfullscreen
           src=""
+          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+        ></iframe>
+
+        <iframe
+          id="nonYoutubePlayer"
+          width="640"
+          height="360"
+          frameborder="0"
+          allowfullscreen
+          src=""
+          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none;"
         ></iframe>
       </div>
     </div>
-    <img src="TVRETRO.png" alt="retro tv" class="tv-frame"/>
+
+    <img src="TVRETRO.png" alt="retro tv" class="tv-frame" />
 
     <div class="tv-buttons">
-      <button id="powerButton" aria-label="Power On/Off"> </button>
-      <button id="channelUp" aria-label="Channel Up"> </button>
-      <button id="channelDown" aria-label="Channel Down"> </button>
-      <button id="volumeUp" aria-label="Volume Up"> </button>
-      <button id="volumeDown" aria-label="Volume Down"> </button>
+      <button id="powerButton" aria-label="Power On/Off">Power</button>
+      <button id="channelUp" aria-label="Channel Up">Channel +</button>
+      <button id="channelDown" aria-label="Channel Down">Channel -</button>
+      <button id="volumeUp" aria-label="Volume Up">Vol +</button>
+      <button id="volumeDown" aria-label="Volume Down">Vol -</button>
     </div>
   </div>
 
