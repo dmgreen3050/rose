@@ -57,15 +57,55 @@ p{
 }
 
 #channelUp{
+  position:absolute;
+  top:83.7%;
+  left:43%;
+  width:23.3px;
+  height:8px;
+  background:transparent;
+  border:none;
+  cursor:pointer;
+  z-index:4;
+  
   
 }
 #channelDown{
+   position:absolute;
+  top:85%;
+  left:45%;
+  width:23.3px;
+  height:8px;
+  background:transparent;
+  border:none;
+  cursor:pointer;
+  z-index:4;
+  
   
 }
-#volumeUp{
+#volumeUp{ 
+  position:absolute;
+  top:85%;
+  left:46%;
+  width:23.3px;
+  height:8px;
+  background:transparent;
+  border:none;
+  cursor:pointer;
+  z-index:4;
+  
   
 }
 #volumeDown{
+   position:absolute;
+  top:85%;
+  left:47%;
+  width:23.3px;
+  height:8px;
+  background:transparent;
+  border:none;
+  cursor:pointer;
+  z-index:4;
+  
   
 }
 .remote{
