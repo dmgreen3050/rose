@@ -4,59 +4,57 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Rosemary's TV</title>
-<link rel="stylesheet" href="style.css" />
-  </head>
-
+  <link rel="stylesheet" href="style.css" />
+</head>
 <body>
-  <!--tv frame-->
   <h1>Rosemary's Retro TV</h1>
   <p>Play this to watch some of her favorites</p>
-<div class="tv-wrapper">
-    <div class="screen">
-   <iframe
-  id="tvPlayer"
-  width="640"
-  height="360"
-  frameborder="0"
-  allow="autoplay; encrypted-media"
-  allowfullscreen
-  src=""
-></iframe>
 
-   
+  <div class="tv-wrapper">
+    <div class="screen" id="tvContainer">
+      <div id="tvPlayerWrapper">
+        <iframe
+          id="tvPlayer"
+          width="640"
+          height="360"
+          frameborder="0"
+          allow="autoplay; encrypted-media"
+          allowfullscreen
+          src=""
+        ></iframe>
+      </div>
     </div>
-  <img src="TVRETRO.png" alt="retro tv" class="tv-frame"/>
- 
+    <img src="TVRETRO.png" alt="retro tv" class="tv-frame"/>
 
-  <div class="tv-buttons">
-  <button id="powerButton" aria-label="Power On/Off"> </button>
-    <button id="channelUp" aria-label="Channel Up"> </button>
-    <button id="channelDown" aria-label="Channel Down"> </button>
-    <button id="volumeUp" aria-label="Volume Up"> </button>
-    <button id="volumeDown" aria-label="volumeDown"> </button>
+    <div class="tv-buttons">
+      <button id="powerButton" aria-label="Power On/Off"> </button>
+      <button id="channelUp" aria-label="Channel Up"> </button>
+      <button id="channelDown" aria-label="Channel Down"> </button>
+      <button id="volumeUp" aria-label="Volume Up"> </button>
+      <button id="volumeDown" aria-label="Volume Down"> </button>
+    </div>
   </div>
-</div>
+
   <div class="remote-buttons">
-  <button id="powerRemote" aria-label="Power On/Off">POWER </button>
-    <button id="channelUpRemote" aria-label="Channel Up">CH ⬆ </button>
-    <button id="channelDownRemote" aria-label="Channel Down">CH ⬇ </button>
-    <button id="volumeUpRemote" aria-label="Volume Up">VOL ⬆</button>
-    <button id="volumeDownRemote" aria-label="volumeDown">VOL ⬇</button>
-    <button id="muteRemote" aria-label="Mute">MUTE </button>
+    <button id="powerRemote">POWER</button>
+    <button id="channelUpRemote">CH ⬆</button>
+    <button id="channelDownRemote">CH ⬇</button>
+    <button id="volumeUpRemote">VOL ⬆</button>
+    <button id="volumeDownRemote">VOL ⬇</button>
+    <button id="muteRemote">MUTE</button>
   </div>
-</div>
-<!--remote buttons-->
+
   <div class="remote">
     <button onclick="switchChannel(0)">Golden Girls</button>
     <button onclick="switchChannel(1)">Christmas Movies</button>
     <button onclick="switchChannel(2)">Lifetime</button>
     <button onclick="switchChannel(3)">Christmas Music</button>
     <button onclick="switchChannel(4)">Music</button>
-    <button onclick="switchChannel(5)">Seinfield</button>
+    <button onclick="switchChannel(5)">Seinfeld</button>
     <button onclick="switchChannel(6)">Movies</button>
   </div>
-    <script src="https://www.youtube.com/iframe_api"></script>
-  <script src="script.js"></script>
 
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script src="script.js"></script>
 </body>
 </html>
