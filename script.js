@@ -1,11 +1,11 @@
 const channels = [
-  "https://www.youtube.com/embed/videoseries?list=PLnJVRTZlANm1EyaREpsWbmXRd34Y66yWV",
-  "https://www.youtube.com/embed/videoseries?list=PLnJVRTZlANm28rG20hiPLXHOievQ8O3Ls",
-  "https://www.youtube.com/embed/videoseries?list=PLiquKSP6s-eFZj2HF0fhw41D5Argpn3_G",
-  "https://www.youtube.com/embed/videoseries?list=PL7Sv7aQs2p0V1FlyUXXbVGekKW65j5QRq",
-  "https://www.youtube.com/embed/videoseries?list=PLnJVRTZlANm3L7JDiPnjIrP2zxEgbdlLJ",
-  "https://watchseinfeld.net/", // Non-YouTube
-  "https://www.youtube.com/embed/5fnsIjeByxQ"
+  "https://www.youtube.com/embed/videoseries?list=PLnJVRTZlANm1EyaREpsWbmXRd34Y66yWV", // Golden Girls
+  "https://www.youtube.com/embed/videoseries?list=PLnJVRTZlANm28rG20hiPLXHOievQ8O3Ls", // Christmas Movies
+  "https://www.youtube.com/embed/videoseries?list=PLiquKSP6s-eFZj2HF0fhw41D5Argpn3_G", // Lifetime
+  "https://www.youtube.com/embed/videoseries?list=PL7Sv7aQs2p0V1FlyUXXbVGekKW65j5QRq", // Christmas Music
+  "https://www.youtube.com/embed/videoseries?list=PLnJVRTZlANm3L7JDiPnjIrP2zxEgbdlLJ", // Music
+  "https://watchseinfeld.net/", // Non-YouTube link
+  "https://www.youtube.com/embed/5fnsIjeByxQ" // Movie clip or whatever
 ];
 
 let currentChannel = 0;
@@ -13,102 +13,123 @@ let isPoweredOn = false;
 let player;
 let playerReady = false;
 
+function isYouTubeURL(url) {
+  return url.includes("youtube.com") || url.includes("youtu.be");
+}
+
+// YouTube iframe API callback
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('tvPlayer', {
-    events: {
-      'onReady': onPlayerReady,
-      'onError': onPlayerError
-    },
+    height: '360',
+    width: '640',
+    videoId: '',
     playerVars: {
       autoplay: 1,
       controls: 0,
-      mute: 0,
+      modestbranding: 1,
       rel: 0,
-      modestbranding: 1
+      mute: 0,
+    },
+    events: {
+      'onReady': onPlayerReady,
+      'onError': onPlayerError
     }
   });
 }
 
 function onPlayerReady(event) {
   playerReady = true;
-  console.log("YouTube Player ready");
+  if (isPoweredOn) {
+    loadChannel(currentChannel);
+  }
 }
 
 function onPlayerError(event) {
-  console.error("YouTube Error:", event.data);
-}
-
-function isYouTubeURL(url) {
-  return url.includes("youtube.com") || url.includes("youtu.be");
+  console.error("YouTube Player Error:", event.data);
 }
 
 function loadChannel(index) {
-  if (!isPoweredOn || !playerReady) return;
+  if (!isPoweredOn) return;
 
   currentChannel = index % channels.length;
   const url = channels[currentChannel];
 
-  const ytFrame = document.getElementById("tvPlayer");
-  const nonYTFrame = document.getElementById("nonYoutubePlayer");
+  const ytIframe = document.getElementById('tvPlayer');
+  const nonYtIframe = document.getElementById('nonYoutubePlayer');
 
   if (isYouTubeURL(url)) {
-    ytFrame.style.display = "block";
-    nonYTFrame.style.display = "none";
-    const videoId = getVideoIdFromUrl(url);
+    // Show YouTube iframe, hide other
+    ytIframe.style.display = 'block';
+    nonYtIframe.style.display = 'none';
+
+    if (!playerReady) {
+      // wait for playerReady, will load channel on ready
+      return;
+    }
+
+    // Extract playlist or video id
     const listId = new URL(url).searchParams.get("list");
+    const videoId = getVideoIdFromUrl(url);
 
     if (listId) {
       player.loadPlaylist({ list: listId });
-    } else {
+    } else if (videoId) {
       player.loadVideoById(videoId);
+    } else {
+      player.cueVideoById(url);
     }
   } else {
-    ytFrame.style.display = "none";
-    nonYTFrame.style.display = "block";
-    nonYTFrame.src = url;
+    // Non-YouTube: hide YouTube iframe, show non-YT iframe with src
+    ytIframe.style.display = 'none';
+    nonYtIframe.style.display = 'block';
+    playerReady = false; // player irrelevant here
+
+    nonYtIframe.src = url;
   }
 }
 
 function getVideoIdFromUrl(url) {
+  // match video id from various YouTube url formats
   const match = url.match(/(?:embed\/|v=|\/v\/|youtu\.be\/)([^&?/]+)/);
   return match ? match[1] : null;
 }
 
 function powerToggle() {
-  const ytFrame = document.getElementById("tvPlayer");
-  const nonYTFrame = document.getElementById("nonYoutubePlayer");
-
   if (!isPoweredOn) {
     isPoweredOn = true;
-    ytFrame.style.display = "block";
-    nonYTFrame.style.display = "none";
     loadChannel(currentChannel);
   } else {
     isPoweredOn = false;
-    if (player && playerReady) player.stopVideo();
-    ytFrame.style.display = "none";
-    nonYTFrame.style.display = "none";
-    nonYTFrame.src = ""; // Clear non-YT src too
+    if (player && playerReady) {
+      player.stopVideo();
+    }
+    // clear iframe srcs
+    document.getElementById('tvPlayer').style.display = 'none';
+    document.getElementById('tvPlayer').src = '';
+    const nonYtIframe = document.getElementById('nonYoutubePlayer');
+    nonYtIframe.style.display = 'none';
+    nonYtIframe.src = '';
   }
 }
 
 function volumeUp() {
-  if (player && playerReady && isPoweredOn) {
-    const vol = player.getVolume();
-    player.setVolume(Math.min(vol + 10, 100));
-  }
+  if (!isPoweredOn || !player || !playerReady) return;
+  let vol = player.getVolume();
+  player.setVolume(Math.min(vol + 10, 100));
 }
 
 function volumeDown() {
-  if (player && playerReady && isPoweredOn) {
-    const vol = player.getVolume();
-    player.setVolume(Math.max(vol - 10, 0));
-  }
+  if (!isPoweredOn || !player || !playerReady) return;
+  let vol = player.getVolume();
+  player.setVolume(Math.max(vol - 10, 0));
 }
 
 function muteToggle() {
-  if (player && playerReady && isPoweredOn) {
-    player.isMuted() ? player.unMute() : player.mute();
+  if (!isPoweredOn || !player || !playerReady) return;
+  if (player.isMuted()) {
+    player.unMute();
+  } else {
+    player.mute();
   }
 }
 
@@ -121,17 +142,29 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById("powerButton").addEventListener("click", powerToggle);
   document.getElementById("powerRemote").addEventListener("click", powerToggle);
 
-  const nextChannel = () => switchChannel((currentChannel + 1) % channels.length);
-  const prevChannel = () => switchChannel((currentChannel - 1 + channels.length) % channels.length);
+  document.getElementById("channelUp").addEventListener("click", () => {
+    if (!isPoweredOn) return;
+    switchChannel((currentChannel + 1) % channels.length);
+  });
+  document.getElementById("channelUpRemote").addEventListener("click", () => {
+    if (!isPoweredOn) return;
+    switchChannel((currentChannel + 1) % channels.length);
+  });
 
-  document.getElementById("channelUp").addEventListener("click", nextChannel);
-  document.getElementById("channelUpRemote").addEventListener("click", nextChannel);
-  document.getElementById("channelDown").addEventListener("click", prevChannel);
-  document.getElementById("channelDownRemote").addEventListener("click", prevChannel);
+  document.getElementById("channelDown").addEventListener("click", () => {
+    if (!isPoweredOn) return;
+    switchChannel((currentChannel - 1 + channels.length) % channels.length);
+  });
+  document.getElementById("channelDownRemote").addEventListener("click", () => {
+    if (!isPoweredOn) return;
+    switchChannel((currentChannel - 1 + channels.length) % channels.length);
+  });
 
   document.getElementById("volumeUp").addEventListener("click", volumeUp);
   document.getElementById("volumeUpRemote").addEventListener("click", volumeUp);
+
   document.getElementById("volumeDown").addEventListener("click", volumeDown);
   document.getElementById("volumeDownRemote").addEventListener("click", volumeDown);
+
   document.getElementById("muteRemote").addEventListener("click", muteToggle);
 });
