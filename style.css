@@ -132,38 +132,28 @@ h1, p {
     
   }
 }
-#powerRemote{
-  color:red;
-  border:rounded;
-  background:#36454F;
-  text-shadow:2px 5px 5px;
-  
+#powerRemote,
+#channelUpRemote,
+#channelDownRemote,
+#volumeUpRemote,
+#muteRemote {
+  background-color: #36454F;
+  border-radius: 8px;
+  border: 2px solid #222;
+  box-shadow:
+    inset 0 2px 5px rgba(255,255,255,0.2),
+    0 2px 5px rgba(0,0,0,0.8);
+  color: #fff; /* white text for contrast */
+  font-weight: bold;
+  padding: 10px 20px;
+  cursor: pointer;
+  text-shadow: 1px 1px 2px black;
 }
-#channelUpRemote{
-  color:black;
-   border:rounded;
-  background:#36454F;
-  text-shadow:2px 5px 5px;
+#powerRemote {
+  background-color: #a60000;
+  border-color: #700000;
 }
-#channelDownRemote{
-  color:black;
-   border:rounded;
-  background:#36454F;
-  text-shadow:2px 5px 5px;
-}
-#volumeUpRemote{
-  color:black;
-   border:rounded;
-  background:#36454F;
-  text-shadow:2px 5px 5px;
-  
-}
-#muteRemote{
-  color:black;
-   border:rounded;
-  background:#36454F;
-  text-shadow:2px 5px 5px;
-}
+
 
 #tvWrapper.flicker {
   animation: flickerAnimation 0.2s ease;
