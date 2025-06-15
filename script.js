@@ -24,7 +24,7 @@ const muteToggleBtn = document.getElementById('muteToggleBtn');
 let player;
 let currentChannelIndex = 0;
 let isPowerOn = false;
-let currentVolume = 50; // volume %
+let currentVolume = 50;
 
 // Create channel buttons dynamically
 channels.forEach(channel => {
@@ -35,19 +35,15 @@ channels.forEach(channel => {
 
 const channelButtons = document.querySelectorAll('.channel-buttons button');
 
-// This function builds the right URL for each channel, video or playlist
 function getVideoIdOrPlaylistId(channel) {
   const id = channel.youtubePlaylistId;
   if (!id) return null;
   if (id.length === 11) {
-    // single video ID
     return { type: 'video', id: id };
   }
-  // playlist or others
   return { type: 'playlist', id: id };
 }
 
-// YouTube API ready callback
 window.onYouTubeIframeAPIReady = function () {
   player = new YT.Player('tvPlayer', {
     height: '100%',
@@ -58,7 +54,7 @@ window.onYouTubeIframeAPIReady = function () {
       modestbranding: 1,
       rel: 0,
       loop: 1,
-      playlist: channels[0].youtubePlaylistId, // initial playlist for loop to work properly
+      playlist: channels[0].youtubePlaylistId,
       playsinline: 1,
       mute: 1
     },
@@ -69,7 +65,6 @@ window.onYouTubeIframeAPIReady = function () {
   });
 };
 
-// On player ready - mute by default and load first channel
 function onPlayerReady(event) {
   event.target.mute();
   loadChannel(currentChannelIndex);
@@ -78,12 +73,10 @@ function onPlayerReady(event) {
   updateMuteButton();
 }
 
-// Handle player state changes if needed
 function onPlayerStateChange(event) {
-  // can add logic if you want (e.g. autoplay next video etc)
+  // Optional: handle autoplay next etc.
 }
 
-// Load channel based on index
 function loadChannel(index) {
   if (!player) return;
 
@@ -91,11 +84,17 @@ function loadChannel(index) {
   if (index >= channels.length) index = 0;
   currentChannelIndex = index;
 
-  // Update active button style
   channelButtons.forEach(btn => btn.classList.remove('active'));
   channelButtons[index].classList.add('active');
 
   const channel = channels[index];
+
+  // Special case: Open Seinfeld in a new tab
+  if (channel.name.toLowerCase() === 'seinfeld') {
+    window.open('https://seinfeldwatch.net', '_blank');
+    return;
+  }
+
   const vidOrList = getVideoIdOrPlaylistId(channel);
 
   if (vidOrList.type === 'video') {
@@ -112,13 +111,12 @@ function loadChannel(index) {
   }
 
   if (isPowerOn) {
-    player.playVideo();  // <-- explicit play to bypass Chrome/Safari autoplay restrictions
+    player.playVideo();
   } else {
     player.pauseVideo();
   }
 }
 
-// Power toggle - show/hide player and play/pause
 function togglePower() {
   if (!player) return;
 
@@ -126,7 +124,7 @@ function togglePower() {
 
   if (isPowerOn) {
     document.querySelector('.tv-screen').style.visibility = 'visible';
-    loadChannel(currentChannelIndex); // load channel and play video
+    loadChannel(currentChannelIndex);
   } else {
     player.pauseVideo();
     document.querySelector('.tv-screen').style.visibility = 'hidden';
@@ -134,7 +132,6 @@ function togglePower() {
   updatePowerButton();
 }
 
-// Volume functions
 function volumeUp() {
   if (!player) return;
   currentVolume = Math.min(currentVolume + 10, 100);
@@ -147,7 +144,6 @@ function volumeDown() {
   player.setVolume(currentVolume);
 }
 
-// Channel functions
 function channelUp() {
   loadChannel(currentChannelIndex + 1);
 }
@@ -156,7 +152,6 @@ function channelDown() {
   loadChannel(currentChannelIndex - 1);
 }
 
-// Mute toggle
 function toggleMute() {
   if (!player) return;
   if (player.isMuted()) {
@@ -167,7 +162,6 @@ function toggleMute() {
   updateMuteButton();
 }
 
-// Update buttons UI text based on state
 function updatePowerButton() {
   powerBtn.textContent = isPowerOn ? 'Power Off' : 'Power On';
 }
@@ -176,7 +170,6 @@ function updateMuteButton() {
   muteToggleBtn.textContent = player.isMuted() ? 'Unmute' : 'Mute';
 }
 
-// Setup button event listeners
 powerBtn.addEventListener('click', togglePower);
 volUpBtn.addEventListener('click', volumeUp);
 volDownBtn.addEventListener('click', volumeDown);
