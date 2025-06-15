@@ -131,6 +131,31 @@ h1, p {
   background-color: #555;
 }
 
+/* Now Playing Marquee */
+.now-playing {
+  background-color: #001f3f;
+  color: #FFDC00;
+  font-size: 1em;
+  padding: 10px;
+  font-family: monospace;
+  border-top: 2px solid #FFDC00;
+  white-space: nowrap;
+  overflow: hidden;
+  box-shadow: 0 0 10px #FFDC00;
+  display: none;
+}
+
+.now-playing span {
+  display: inline-block;
+  padding-left: 100%;
+  animation: marquee 12s linear infinite;
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(0%); }
+  100% { transform: translateX(-100%); }
+}
+
 /* Responsive Design */
 @media (max-width: 600px) {
   #tvContainer {
@@ -145,12 +170,11 @@ h1, p {
   }
 
   .tv-guide {
-    flex-direction: column;
-    align-items: center;
+    display: none;
   }
 
-  .channel-item {
-    min-width: 90%;
+  .now-playing {
+    display: block;
   }
 
   .remote-buttons {
