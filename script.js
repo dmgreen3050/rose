@@ -59,8 +59,10 @@ function loadChannel(index) {
     nonYtIframe.src = "";
     if (player && playerReady) player.stopVideo();
 
-    // Open Seinfeld in new tab like Firefox
-    window.open("https://watchseinfeld.net/", '_blank');
+    // Open Seinfeld in new tab like Firefox (Safari requires direct interaction)
+    setTimeout(() => {
+      window.open("https://watchseinfeld.net/", '_blank');
+    }, 100);
   } else {
     nonYtIframe.style.display = 'none';
     nonYtIframe.src = "";
@@ -78,7 +80,9 @@ function loadChannel(index) {
       player.loadPlaylist({ list: channelId });
     }
 
-    player.playVideo();
+    if (typeof player.playVideo === 'function') {
+      player.playVideo();
+    }
     player.unMute();
   }
 
@@ -95,6 +99,14 @@ function powerToggle() {
   if (isPoweredOn) {
     if (playerReady) {
       loadChannel(currentChannel);
+    } else {
+      // Wait for player to be ready before loading channel
+      const waitForReady = setInterval(() => {
+        if (playerReady) {
+          loadChannel(currentChannel);
+          clearInterval(waitForReady);
+        }
+      }, 100);
     }
   } else {
     if (player && playerReady) player.stopVideo();
