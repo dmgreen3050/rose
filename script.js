@@ -9,7 +9,7 @@ const channels = [
 ];
 
 let player;
-let currentChannel = -1;
+let currentChannel = 0;
 let volume = 50;
 
 const channelButtonsContainer = document.querySelector('.channel-buttons');
@@ -19,7 +19,7 @@ const tvPlayerContainer = document.getElementById('tvPlayer');
 function createChannelButtons() {
   channels.forEach((ch, i) => {
     const btn = document.createElement('button');
-    btn.textContent = ch.name;
+    btn.textContent = ch.number + " - " + ch.name;
     btn.onclick = () => switchChannel(i);
     channelButtonsContainer.appendChild(btn);
   });
@@ -47,7 +47,7 @@ function onYouTubeIframeAPIReady() {
     events: {
       onReady: () => {
         createChannelButtons();
-        switchChannel(0); // start on first channel
+        switchChannel(0);
       }
     }
   });
@@ -55,45 +55,36 @@ function onYouTubeIframeAPIReady() {
 
 function switchChannel(i) {
   if (i < 0 || i >= channels.length) return;
-  if (i === currentChannel) return; // don't reload same channel
+  if (i === currentChannel) return;
 
   const ch = channels[i];
-
-  // Handle Seinfeld external link
+  
   if (ch.youtubePlaylistId === "SEINFELD") {
-    // Hide YouTube player, show iframe with link
     if (player) player.stopVideo();
     tvPlayerContainer.style.display = 'none';
     nonYoutubePlayer.style.display = 'block';
     nonYoutubePlayer.src = "https://watchseinfeld.net/";
-    currentChannel = i;
-    updateChannelButtons();
-    return;
+  } else {
+    nonYoutubePlayer.style.display = 'none';
+    nonYoutubePlayer.src = '';
+    tvPlayerContainer.style.display = 'block';
+    
+    if (player) {
+      if (ch.youtubePlaylistId.length > 10) {
+        player.loadPlaylist({ list: ch.youtubePlaylistId, listType: 'playlist' });
+      } else {
+        player.loadVideoById(ch.youtubePlaylistId);
+      }
+      player.setVolume(volume);
+    }
   }
-
-  // Normal YouTube channels
-  nonYoutubePlayer.style.display = 'none';
-  nonYoutubePlayer.src = '';
-  tvPlayerContainer.style.display = 'block';
-
+  
   currentChannel = i;
   updateChannelButtons();
-
-  if (!player) return;
-
-  // Play playlist or video based on id length
-  if (ch.youtubePlaylistId.length > 10) {
-    player.loadPlaylist({ list: ch.youtubePlaylistId, listType: 'playlist' });
-  } else {
-    player.loadVideoById(ch.youtubePlaylistId);
-  }
-  player.setVolume(volume);
 }
 
-// Power button: stop video and reset
 document.getElementById('powerBtn').onclick = () => {
-  if (!player) return;
-  player.stopVideo();
+  if (player) player.stopVideo();
   nonYoutubePlayer.style.display = 'none';
   nonYoutubePlayer.src = '';
   tvPlayerContainer.style.display = 'block';
@@ -101,20 +92,16 @@ document.getElementById('powerBtn').onclick = () => {
   updateChannelButtons();
 };
 
-// Channel up/down buttons cycle channels
 document.getElementById('channelUpBtn').onclick = () => {
   if (currentChannel === -1) return;
-  let next = (currentChannel + 1) % channels.length;
-  switchChannel(next);
+  switchChannel((currentChannel + 1) % channels.length);
 };
 
 document.getElementById('channelDownBtn').onclick = () => {
   if (currentChannel === -1) return;
-  let prev = (currentChannel - 1 + channels.length) % channels.length;
-  switchChannel(prev);
+  switchChannel((currentChannel - 1 + channels.length) % channels.length);
 };
 
-// Volume control buttons
 document.getElementById('volumeUpBtn').onclick = () => {
   volume = Math.min(100, volume + 10);
   if (player) player.setVolume(volume);
@@ -131,7 +118,6 @@ document.getElementById('muteBtn').onclick = () => {
   else player.mute();
 };
 
-// Pause/play toggle
 document.getElementById('pauseBtn').onclick = () => {
   if (!player) return;
   const state = player.getPlayerState();
@@ -139,7 +125,6 @@ document.getElementById('pauseBtn').onclick = () => {
   else player.playVideo();
 };
 
-// Rewind and fast-forward 10 seconds
 document.getElementById('rewindBtn').onclick = () => {
   if (!player) return;
   player.seekTo(Math.max(0, player.getCurrentTime() - 10), true);
