@@ -1,18 +1,14 @@
-let channels = [
+const channels = [
   "PLnJVRTZlANm1EyaREpsWbmXRd34Y66yWV", // Golden Girls playlist ID
-  "PLnJVRTZlANm28rG20hiPLXHOievQ8O3Ls", // Christmas Movies playlist ID
   "PLiquKSP6s-eFZj2HF0fhw41D5Argpn3_G", // Lifetime playlist ID
-  "PL7Sv7aQs2p0V1FlyUXXbVGekKW65j5QRq", // Christmas Music playlist ID
-  "PLnJVRTZlANm3L7JDiPnjIrP2zxEgbdlLJ", // Music playlist ID
   "SEINFELD", // Special non-YouTube handled below
   "5fnsIjeByxQ" // Single YouTube video ID - movie clip
 ];
 
-let currentChannel = 0;
+let currentChannel = -1; // Start with no channel selected
 let isPoweredOn = false;
 let player;
 let playerReady = false;
-let isChangingChannel = false; // debounce flag
 
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('tvPlayer', {
@@ -26,15 +22,18 @@ function onYouTubeIframeAPIReady() {
       mute: 1
     },
     events: {
-      'onReady': () => {
-        console.log('Player ready');
-        playerReady = true;
-        if (isPoweredOn) loadChannel(currentChannel);
-      },
+      'onReady': onPlayerReady,
       'onStateChange': onPlayerStateChange,
       'onError': onPlayerError
     }
   });
+}
+
+function onPlayerReady(event) {
+  playerReady = true;
+  if (isPoweredOn && currentChannel >= 0) {
+    loadChannel(currentChannel);
+  }
 }
 
 function onPlayerStateChange(event) {}
@@ -43,38 +42,36 @@ function onPlayerError(event) {
   console.error("YouTube Player Error:", event.data);
 }
 
+function flickerEffect() {
+  const tvWrapper = document.getElementById('tvWrapper');
+  tvWrapper.classList.add('flicker');
+  setTimeout(() => {
+    tvWrapper.classList.remove('flicker');
+  }, 200);
+}
+
 function loadChannel(index) {
-  if (!isPoweredOn || !playerReady) {
-    console.log("Cannot load channel, player not ready or TV off.");
-    return;
-  }
-  if (isChangingChannel) {
-    console.log("Channel change already in progress, please wait.");
-    return;
-  }
-  if (index === currentChannel) {
-    console.log("Channel already playing.");
+  if (!isPoweredOn) return;
+  if (!playerReady) {
+    console.log("Player not ready.");
     return;
   }
 
-  isChangingChannel = true;
+  flickerEffect();
 
-  const newIndex = index % channels.length;
-  const newChannelId = channels[newIndex];
-
+  currentChannel = index % channels.length;
+  const channelId = channels[currentChannel];
   const ytPlayerDiv = document.getElementById('tvPlayer');
   const nonYtIframe = document.getElementById('nonYoutubePlayer');
 
-  if (newChannelId === "SEINFELD") {
+  if (channelId === "SEINFELD") {
     ytPlayerDiv.style.display = 'none';
     nonYtIframe.style.display = 'none';
     nonYtIframe.src = "";
-    player.stopVideo();
+    if (player && playerReady) player.stopVideo();
     setTimeout(() => {
       window.open("https://watchseinfeld.net/", '_blank');
-      isChangingChannel = false;
     }, 100);
-    currentChannel = newIndex;
     return;
   }
 
@@ -82,36 +79,33 @@ function loadChannel(index) {
   nonYtIframe.style.display = 'none';
   nonYtIframe.src = "";
 
-  if (newChannelId.length === 11) {
-    player.loadVideoById(newChannelId);
-  } else {
-    player.loadPlaylist({ list: newChannelId });
-  }
-  player.unMute();
-  player.playVideo();
+  // Stop video before loading new channel for smooth reload
+  player.stopVideo();
 
-  currentChannel = newIndex;
-
-  // Debounce to prevent rapid channel switching
   setTimeout(() => {
-    isChangingChannel = false;
-  }, 1500);
+    if (channelId.length === 11) {
+      player.loadVideoById(channelId);
+    } else {
+      player.loadPlaylist({ list: channelId });
+    }
+    player.unMute();
+    player.playVideo();
+  }, 100);
 }
 
 function powerToggle() {
   isPoweredOn = !isPoweredOn;
   console.log("Power:", isPoweredOn ? "ON" : "OFF");
-
   const ytPlayerDiv = document.getElementById('tvPlayer');
   const nonYtIframe = document.getElementById('nonYoutubePlayer');
 
   if (isPoweredOn) {
     if (playerReady) {
-      loadChannel(currentChannel);
+      loadChannel(currentChannel >= 0 ? currentChannel : 0);
     } else {
       const waitForReady = setInterval(() => {
         if (playerReady) {
-          loadChannel(currentChannel);
+          loadChannel(currentChannel >= 0 ? currentChannel : 0);
           clearInterval(waitForReady);
         }
       }, 100);
@@ -125,12 +119,12 @@ function powerToggle() {
 }
 
 function channelUp() {
-  if (!isPoweredOn || !playerReady) return;
+  if (!isPoweredOn) return;
   loadChannel((currentChannel + 1) % channels.length);
 }
 
 function channelDown() {
-  if (!isPoweredOn || !playerReady) return;
+  if (!isPoweredOn) return;
   loadChannel((currentChannel - 1 + channels.length) % channels.length);
 }
 
@@ -161,19 +155,9 @@ function muteToggle() {
 
 window.addEventListener('DOMContentLoaded', () => {
   document.getElementById("powerButton").addEventListener("click", powerToggle);
-  document.getElementById("powerRemote").addEventListener("click", powerToggle);
-
   document.getElementById("channelUp").addEventListener("click", channelUp);
-  document.getElementById("channelUpRemote").addEventListener("click", channelUp);
-
   document.getElementById("channelDown").addEventListener("click", channelDown);
-  document.getElementById("channelDownRemote").addEventListener("click", channelDown);
-
   document.getElementById("volumeUp").addEventListener("click", volumeUp);
-  document.getElementById("volumeUpRemote").addEventListener("click", volumeUp);
-
   document.getElementById("volumeDown").addEventListener("click", volumeDown);
-  document.getElementById("volumeDownRemote").addEventListener("click", volumeDown);
-
   document.getElementById("muteRemote").addEventListener("click", muteToggle);
 });
