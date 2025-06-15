@@ -8,9 +8,9 @@
 </head>
 <body>
   <h1>Rosemary's TV</h1>
-  <p> Watch some of her favorites</p>
+  <p>Watch some of her favorites</p>
 
-  <div class="tv-wrapper" id=tvWrapper>
+  <div class="tv-wrapper" id="tvWrapper">
     <div class="screen" id="tvContainer">
       <div id="tvPlayerWrapper" style="position: relative; width: 640px; height: 360px; margin: 0 auto 20px; border: 10px solid #444; box-shadow: 0 0 30px #000;">
         <div id="tvPlayer"></div>
@@ -48,13 +48,27 @@
   </div>
 
   <div class="remote">
-    <button id="goldenGirls" onclick="switchChannel(0)">Golden Girls</button>
-    <button id="christmasMovies"onclick="switchChannel(1)">Christmas Movies</button>
-    <button id="lifeTime" onclick="switchChannel(2)">Lifetime</button>
-    <button id="christmasMusic"onclick="switchChannel(3)">Christmas Music</button>
-    <button id="music"onclick="switchChannel(4)">Music</button>
-    <button id="seinfeld"onclick="switchChannel(5)">Seinfeld</button>
-    <button id="movies"onclick="switchChannel(6)">Movies</button>
+    <button id="goldenGirls" onclick="switchChannel(0)">
+      <span class="channel-num">01</span> Golden Girls
+    </button>
+    <button id="christmasMovies" onclick="switchChannel(1)">
+      <span class="channel-num">02</span> Christmas Movies
+    </button>
+    <button id="lifeTime" onclick="switchChannel(2)">
+      <span class="channel-num">03</span> Lifetime
+    </button>
+    <button id="christmasMusic" onclick="switchChannel(3)">
+      <span class="channel-num">04</span> Christmas Music
+    </button>
+    <button id="music" onclick="switchChannel(4)">
+      <span class="channel-num">05</span> Music
+    </button>
+    <button id="seinfeld" onclick="switchChannel(5)">
+      <span class="channel-num">06</span> Seinfeld
+    </button>
+    <button id="movies" onclick="switchChannel(6)">
+      <span class="channel-num">07</span> Movies
+    </button>
   </div>
 
   <script src="https://www.youtube.com/iframe_api"></script>
