@@ -1,5 +1,3 @@
-/* style.css */
-
 body {
   margin: 0;
   padding: 0;
@@ -12,15 +10,12 @@ body {
   text-align: center;
 }
 
-h1, p {
-  margin: 0.5em 0;
-}
-
 .tv-wrapper {
-  position: relative;
-  width: 600px;
-  height: 400px; /* fixed aspect ratio 3:2 */
+  width: 100%;
+  max-width: 600px;
+  aspect-ratio: 3 / 2; /* Keeps 600x400 ratio */
   margin: 1em auto;
+  position: relative;
 }
 
 .tv-frame {
@@ -29,7 +24,7 @@ h1, p {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 2;
   pointer-events: none;
 }
 
@@ -39,110 +34,32 @@ h1, p {
   left: 10%;
   width: 80%;
   height: 65%;
-  z-index: 0;
+  z-index: 1;
   overflow: hidden;
   border-radius: 8px;
 }
 
-#tvPlayerWrapper, #tvPlayer, #nonYoutubePlayer {
+#tvPlayerWrapper,
+#tvPlayer,
+#nonYoutubePlayer {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* keep aspect ratio */
+  object-fit: contain;
+  border: none;
 }
 
-#nonYoutubePlayer {
-  display: none;
-}
-
-.remote-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5em;
-  margin: 1em auto;
-}
-
-.remote-buttons button {
-  padding: 0.5em 1em;
-  background-color: #222;
-  color: yellow;
-  border: 2px solid yellow;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.remote-buttons button:hover {
-  background-color: yellow;
-  color: #222;
-}
-
-.tv-guide {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 90%;
-  max-width: 600px;
-  background-color: navy;
-  border: 3px solid yellow;
-  border-radius: 6px;
-  padding: 1em;
-  margin: 1em 0;
-  color: white;
-  font-size: 0.9em;
-  overflow-x: auto;
-}
-
-.channel-item {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  padding: 0.5em;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid yellow;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.channel-item:hover,
-.channel-item.active {
-  background-color: yellow;
-  color: black;
-}
-
-.channel-number,
-.channel-time,
-.channel-name {
-  flex: 1;
-  text-align: center;
-}
-
-/* Responsive */
+/* Responsive Fix */
 @media screen and (max-width: 700px) {
   .tv-wrapper {
     width: 100%;
-    max-width: 600px;
-    height: auto;
-    aspect-ratio: 3 / 2; /* keep 3:2 ratio */
-  }
-
-  #tvContainer {
-    position: relative;
-    width: 100%;
-    height: auto;
+    max-width: 100%;
     aspect-ratio: 3 / 2;
   }
 
-  #tvPlayerWrapper,
-  #tvPlayer,
-  #nonYoutubePlayer {
-    object-fit: contain;
-  }
-
-  .remote-buttons,
-  .tv-guide {
-    width: 100%;
-    padding: 0.5em;
+  #tvContainer {
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 65%;
   }
 }
