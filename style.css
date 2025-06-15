@@ -1,168 +1,188 @@
-/* Reset */
+/* Reset & base */
 * {
   box-sizing: border-box;
-  margin: 0; padding: 0;
+  margin: 0;
+  padding: 0;
 }
 body {
-  background: #001f3f; /* dark blue */
+  background: #000; /* dark retro vibe */
   color: #fff;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  user-select: none;
-  padding: 20px;
-}
-h1 {
+  font-family: 'Arial Black', Arial, sans-serif;
   text-align: center;
-  margin-bottom: 8px;
-  color: #ffdc00; /* classic yellow */
-  text-shadow: 1px 1px 4px #000;
-}
-p {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #b3d1ff;
-}
-
-/* Container for TV and controls */
-.tv-container {
+  min-height: 100vh;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+}
+
+h1, p {
+  margin-bottom: 1rem;
+}
+
+/* App container flex to hold TV, Guide, Remote side by side */
+.app-container {
+  display: flex;
   gap: 20px;
-}
-
-/* TV Screen + Guide wrapper */
-.tv-and-guide {
-  max-width: 660px;
-  flex: 1 1 660px;
-}
-
-/* TV screen */
-.screen {
-  position: relative;
-  background: #000;
-  border: 12px solid #0051a2; /* darker blue border */
-  border-radius: 12px;
+  max-width: 1200px;
   width: 100%;
-  max-width: 660px;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  box-shadow: 0 0 20px #ffdc00;
-  margin-bottom: 10px;
+  justify-content: center;
+  align-items: flex-start;
 }
-#tvPlayer, #nonYoutubePlayer {
+
+/* TV wrapper: relative positioning for the screen and frame */
+.tv-wrapper {
+  position: relative;
+  width: 640px;
+  height: 400px;
+  flex-shrink: 0;
+}
+
+/* The screen area inside the TV */
+#tvPlayerWrapper {
+  position: absolute;
+  top: 50px;  /* adjust to fit inside the TV frame */
+  left: 48px;
+  width: 544px; /* fits nicely inside your TV image */
+  height: 306px;
+  background: black;
+  box-shadow: 0 0 30px #222 inset;
+  z-index: 2;
+  border: 8px solid #444;
+}
+
+/* Make the iframe fill the player */
+#tvPlayer {
   width: 100%;
   height: 100%;
 }
 
-/* TV Guide: horizontal list of channels */
+/* Retro TV frame image styles */
+.tv-frame {
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 1;
+  position: relative;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* TV Guide container - vertical sidebar with blue/yellow Dish style */
 .tv-guide {
-  display: flex;
-  overflow-x: auto;
-  background: #0051a2; /* blue background */
+  width: 240px;
+  background: linear-gradient(180deg, #0033a0, #0055cc);
+  color: #ffdb00; /* bright yellow */
+  font-weight: bold;
+  font-size: 14px;
   border-radius: 8px;
-  box-shadow: inset 0 0 10px #003570;
-}
-.tv-guide::-webkit-scrollbar {
-  height: 6px;
-}
-.tv-guide::-webkit-scrollbar-thumb {
-  background: #ffdc00;
-  border-radius: 3px;
+  padding: 10px;
+  overflow-y: auto;
+  max-height: 400px;
+  box-shadow: 0 0 10px #0055cc;
 }
 
+/* Individual channel item */
 .channel-item {
-  flex: 0 0 140px;
-  padding: 10px 12px;
-  color: white;
-  border-right: 1px solid #004080;
-  cursor: pointer;
-  user-select: none;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  transition: background 0.3s, color 0.3s;
+  padding: 8px 10px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.25s ease;
 }
-.channel-item:last-child {
-  border-right: none;
-}
+
 .channel-item:hover {
-  background: #ffdc00;
-  color: #0051a2;
+  background-color: #ffdb00;
+  color: #0033a0;
 }
 
-/* Highlight the active channel */
 .channel-item.active {
-  background: #ffdc00;
-  color: #0051a2;
-  font-weight: 700;
-  box-shadow: inset 0 0 8px #fff;
+  background-color: #ffdb00;
+  color: #0033a0;
+  font-weight: 900;
 }
 
-/* Channel number */
-.channel-number {
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin-bottom: 6px;
+.channel-number, .channel-time {
+  width: 40px;
+  text-align: left;
 }
-/* Time */
-.channel-time {
-  font-size: 0.8rem;
-  font-family: monospace;
-  margin-bottom: 6px;
-}
-/* Channel name */
+
 .channel-name {
-  font-size: 1rem;
+  flex-grow: 1;
+  text-align: left;
+  padding-left: 10px;
 }
 
-/* Remote on the right */
-.remote {
-  width: 160px;
-  background: #003570; /* darker blue */
-  border-radius: 12px;
-  box-shadow: 0 0 15px #000;
+/* Remote buttons vertical stack */
+.remote-buttons {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 15px 10px;
-  user-select: none;
-}
-.remote button {
-  background: #ffdc00; /* yellow */
-  border: none;
-  border-radius: 6px;
-  font-weight: 700;
-  color: #003570;
-  padding: 12px 10px;
-  cursor: pointer;
-  transition: background 0.2s;
-  font-size: 1rem;
-}
-.remote button:hover,
-.remote button:focus {
-  background: #ffc107;
-  outline: none;
+  gap: 10px;
+  max-height: 400px;
+  width: 120px;
+  background: #222;
+  border-radius: 10px;
+  padding: 10px;
+  color: #ffdb00;
+  font-weight: bold;
+  font-size: 14px;
+  box-shadow: 0 0 15px #ffdb00;
 }
 
-/* Responsive */
-@media (max-width: 850px) {
-  .tv-container {
+/* Remote buttons style */
+.remote-buttons button {
+  background: #0033a0;
+  border: none;
+  color: #ffdb00;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.remote-buttons button:hover {
+  background-color: #ffdb00;
+  color: #0033a0;
+}
+
+/* Responsive: on smaller screens, stack vertically */
+@media (max-width: 900px) {
+  .app-container {
     flex-direction: column;
     align-items: center;
   }
-  .tv-and-guide {
-    max-width: 100%;
-    margin-bottom: 20px;
+  .tv-wrapper {
+    width: 90vw;
+    height: auto;
   }
-  .remote {
+  #tvPlayerWrapper {
+    position: relative;
+    top: 0;
+    left: 0;
     width: 100%;
-    flex-direction: row;
+    height: 56vw; /* 16:9 ratio */
+    max-height: 300px;
+  }
+  .tv-guide, .remote-buttons {
+    width: 90vw;
+    max-height: none;
+    display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
+    margin-top: 15px;
   }
-  .remote button {
-    flex: 1 1 120px;
-    padding: 10px;
+  .channel-item {
+    width: 30%;
+    margin: 5px;
+  }
+  .remote-buttons {
+    flex-direction: row;
+    gap: 8px;
+  }
+  .remote-buttons button {
+    flex: 1 1 auto;
   }
 }
