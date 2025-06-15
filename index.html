@@ -1,36 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Retro TV</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Retro TV Web App</title>
+<link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <h1>Retro TV</h1>
-  <div class="tv-wrapper">
-    <div class="tv-screen">
-      <div id="tvPlayerWrapper">
-        <div id="tvPlayer"></div>
-        <iframe id="nonYoutubePlayer" allowfullscreen></iframe>
-      </div>
+
+<div class="tv-wrapper">
+  <div class="tv-screen">
+    <div id="tvPlayerWrapper">
+      <iframe id="tvPlayer" src="" allow="autoplay; encrypted-media" allowfullscreen playsinline muted></iframe>
     </div>
-    <img src="TVRETRO.png" alt="TV Frame" class="tv-frame" />
   </div>
+</div>
 
-  <div class="remote-buttons">
-    <button id="powerBtn">POWER</button>
-    <button id="channelUpBtn">CH ▲</button>
-    <button id="channelDownBtn">CH ▼</button>
-    <button id="muteBtn">MUTE</button>
-    <button id="pauseBtn">PAUSE</button>
-  </div>
+<div class="channel-buttons"></div>
 
-  <div class="channel-buttons">
-    <!-- Channel buttons will be created here -->
-  </div>
+<!-- Remote Buttons -->
+<div class="remote-buttons">
+  <button id="powerBtn">Power On/Off</button>
+  <button id="volUpBtn">Volume +</button>
+  <button id="volDownBtn">Volume -</button>
+  <button id="channelUpBtn">Channel +</button>
+  <button id="channelDownBtn">Channel -</button>
+</div>
 
-  <script src="https://www.youtube.com/iframe_api"></script>
-  <script src="script.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
