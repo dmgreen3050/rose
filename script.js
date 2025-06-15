@@ -5,7 +5,7 @@ const channels = [
   "5fnsIjeByxQ" // Single YouTube video ID - movie clip
 ];
 
-let currentChannel = -1; // Start with no channel selected
+let currentChannel = -1;
 let isPoweredOn = false;
 let player;
 let playerReady = false;
@@ -51,11 +51,7 @@ function flickerEffect() {
 }
 
 function loadChannel(index) {
-  if (!isPoweredOn) return;
-  if (!playerReady) {
-    console.log("Player not ready.");
-    return;
-  }
+  if (!isPoweredOn || !playerReady) return;
 
   flickerEffect();
 
@@ -79,7 +75,6 @@ function loadChannel(index) {
   nonYtIframe.style.display = 'none';
   nonYtIframe.src = "";
 
-  // Stop video before loading new channel for smooth reload
   player.stopVideo();
 
   setTimeout(() => {
@@ -153,11 +148,45 @@ function muteToggle() {
   }
 }
 
+// The helper function for touch + click event handling
+function addFastClickListener(element, handler) {
+  let touched = false;
+
+  element.addEventListener("touchstart", (e) => {
+    touched = true;
+    handler();
+    e.preventDefault();
+  });
+
+  element.addEventListener("click", (e) => {
+    if (touched) {
+      touched = false;
+      return;
+    }
+    handler();
+  });
+}
+
 window.addEventListener('DOMContentLoaded', () => {
-  document.getElementById("powerButton").addEventListener("click", powerToggle);
-  document.getElementById("channelUp").addEventListener("click", channelUp);
-  document.getElementById("channelDown").addEventListener("click", channelDown);
-  document.getElementById("volumeUp").addEventListener("click", volumeUp);
-  document.getElementById("volumeDown").addEventListener("click", volumeDown);
-  document.getElementById("muteRemote").addEventListener("click", muteToggle);
+  addFastClickListener(document.getElementById("powerButton"), powerToggle);
+  addFastClickListener(document.getElementById("channelUp"), channelUp);
+  addFastClickListener(document.getElementById("channelDown"), channelDown);
+  addFastClickListener(document.getElementById("volumeUp"), volumeUp);
+  addFastClickListener(document.getElementById("volumeDown"), volumeDown);
+
+  addFastClickListener(document.getElementById("powerRemote"), powerToggle);
+  addFastClickListener(document.getElementById("channelUpRemote"), channelUp);
+  addFastClickListener(document.getElementById("channelDownRemote"), channelDown);
+  addFastClickListener(document.getElementById("volumeUpRemote"), volumeUp);
+  addFastClickListener(document.getElementById("volumeDownRemote"), volumeDown);
+  addFastClickListener(document.getElementById("muteRemote"), muteToggle);
 });
+
+// Optional global switchChannel function for your channel buttons (if needed)
+function switchChannel(index) {
+  if (!isPoweredOn) {
+    isPoweredOn = true;
+    powerToggle();
+  }
+  loadChannel(index);
+}
