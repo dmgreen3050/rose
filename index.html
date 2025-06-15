@@ -4,55 +4,36 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Rosemary's TV</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+
   <h1>Rosemary's TV</h1>
   <p>Watch some of her favorites</p>
 
-  <div class="tv-wrapper" id="tvWrapper">
-
-    <div class="tv-screen-wrapper">
-      <div id="tvPlayerWrapper">
+  <div class="tv-container">
+    <div class="tv-and-guide">
+      <div class="screen">
         <div id="tvPlayer"></div>
-        <iframe
-          id="nonYoutubePlayer"
-          frameborder="0"
-          allowfullscreen
-          src=""
-          style="display:none"
-        ></iframe>
+        <iframe id="nonYoutubePlayer" style="display:none;" frameborder="0" allowfullscreen></iframe>
       </div>
 
-      <img src="TVRETRO.png" alt="Retro TV Frame" class="tv-frame" />
+      <div class="tv-guide" id="tvGuide">
+        <!-- Channels will be populated here -->
+      </div>
     </div>
 
-    <div class="tv-buttons">
-      <button id="powerButton">Power</button>
-      <button id="channelUp">Channel ▲</button>
-      <button id="channelDown">Channel ▼</button>
-      <button id="volumeUp">Volume ▲</button>
-      <button id="volumeDown">Volume ▼</button>
+    <div class="remote" id="remoteControls">
+      <button id="powerBtn">POWER</button>
+      <button id="channelUpBtn">CH ▲</button>
+      <button id="channelDownBtn">CH ▼</button>
+      <button id="volumeUpBtn">VOL ▲</button>
+      <button id="volumeDownBtn">VOL ▼</button>
+      <button id="muteBtn">MUTE</button>
+      <button id="pauseBtn">PAUSE</button>
+      <button id="rewindBtn">⏪ REWIND</button>
+      <button id="fastForwardBtn">⏩ FF</button>
     </div>
-  </div>
-
-  <div class="remote-buttons">
-    <button id="powerRemote">POWER</button>
-    <button id="channelUpRemote">CH ▲</button>
-    <button id="channelDownRemote">CH ▼</button>
-    <button id="volumeUpRemote">VOL ▲</button>
-    <button id="volumeDownRemote">VOL ▼</button>
-    <button id="muteRemote">MUTE</button>
-  </div>
-
-  <div class="remote">
-    <button id="goldenGirls" onclick="switchChannel(0)">Golden Girls</button>
-    <button id="christmasMovies" onclick="switchChannel(1)">Christmas Movies</button>
-    <button id="lifeTime" onclick="switchChannel(2)">Lifetime</button>
-    <button id="christmasMusic" onclick="switchChannel(3)">Christmas Music</button>
-    <button id="music" onclick="switchChannel(4)">Music</button>
-    <button id="seinfeld" onclick="switchChannel(5)">Seinfeld</button>
-    <button id="movies" onclick="switchChannel(6)">Movies</button>
   </div>
 
   <script src="https://www.youtube.com/iframe_api"></script>
