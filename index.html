@@ -10,19 +10,23 @@
   <h1>Rosemary's TV</h1>
   <p>Watch some of her favorites</p>
 
-  <div class="app-container">
-    <div class="tv-wrapper" id="tvWrapper">
-      <div class="screen" id="tvContainer">
-        <div id="tvPlayerWrapper">
-          <div id="tvPlayer"></div>
-        </div>
+  <div class="tv-wrapper" id="tvWrapper">
+    <div class="screen" id="tvContainer">
+      <div id="tvPlayerWrapper">
+        <div id="tvPlayer"></div>
+        <iframe
+          id="nonYoutubePlayer"
+          frameborder="0"
+          allowfullscreen
+          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none;"
+          src=""
+        ></iframe>
       </div>
-      <img src="TVRETRO.png" alt="retro tv" class="tv-frame" />
     </div>
 
-    <div id="tvGuide" class="tv-guide"></div>
+    <div id="tvGuide"></div>
 
-    <div class="remote-buttons">
+    <div class="tv-buttons">
       <button id="powerBtn">POWER</button>
       <button id="channelUpBtn">CH ▲</button>
       <button id="channelDownBtn">CH ▼</button>
@@ -30,8 +34,8 @@
       <button id="volumeDownBtn">VOL ▼</button>
       <button id="muteBtn">MUTE</button>
       <button id="pauseBtn">PAUSE/PLAY</button>
-      <button id="rewindBtn"><< REWIND</button>
-      <button id="fastForwardBtn">FAST >> </button>
+      <button id="rewindBtn">⏪ 10s</button>
+      <button id="fastForwardBtn">⏩ 10s</button>
     </div>
   </div>
 
