@@ -4,7 +4,7 @@ const channels = [
   { number: "03", name: "Lifetime", youtubePlaylistId: "PL7Sv7aQs2p0V1FlyUXXbVGekKW65j5QRq" },
   { number: "04", name: "Christmas Music", youtubePlaylistId: "PLiquKSP6s-eFZj2HF0fhw41D5Argpn3_G" },
   { number: "05", name: "Music", youtubePlaylistId: "PLnJVRTZlANm3L7JDiPnjIrP2zxEgbdlLJ" },
-  { number: "06", name: "Seinfeld", youtubePlaylistId: "SEINFELD" },
+  { number: "06", name: "Seinfeld", externalUrl: "https://watchseinfeld.net" },
   { number: "07", name: "Movies", youtubePlaylistId: "5fnsIjeByxQ" }
 ];
 
@@ -21,80 +21,46 @@ let currentChannelIndex = 0;
 let isPowerOn = true;
 let currentVolume = 50;
 
-// Create buttons
-channels.forEach((channel, index) => {
+// Create channel buttons dynamically
+channels.forEach(channel => {
   const btn = document.createElement('button');
   btn.textContent = `${channel.number} - ${channel.name}`;
-  btn.dataset.index = index;
+  btn.dataset.channelIndex = channels.indexOf(channel);
   channelButtonsContainer.appendChild(btn);
 });
 
 const channelButtons = document.querySelectorAll('.channel-buttons button');
 
 function loadChannel(index) {
-  if (!isPowerOn) return;
   if (index < 0) index = channels.length - 1;
   if (index >= channels.length) index = 0;
-
   currentChannelIndex = index;
 
   channelButtons.forEach(btn => btn.classList.remove('active'));
   channelButtons[index].classList.add('active');
 
-  const playlistId = channels[index].youtubePlaylistId;
+  const channel = channels[index];
+
+  if (!isPowerOn) return;
+
+  // Handle external URL (like Seinfeld)
+  if (channel.externalUrl) {
+    tvPlayer.src = '';
+    window.open(channel.externalUrl, '_blank');
+    return;
+  }
+
+  const playlistId = channel.youtubePlaylistId;
   let src = '';
 
-  if (playlistId.length === 11 && !playlistId.startsWith('PL')) {
+  if (!playlistId || typeof playlistId !== 'string') {
+    console.error('Invalid playlistId:', playlistId);
+    return;
+  }
+
+  if (playlistId.length === 11) {
     src = `https://www.youtube.com/embed/${playlistId}?autoplay=1&controls=0&loop=1&playlist=${playlistId}&mute=0&playsinline=1`;
-  } else {
+  } else if (playlistId.startsWith('PL')) {
     src = `https://www.youtube.com/embed/videoseries?list=${playlistId}&autoplay=1&controls=0&loop=1&mute=0&playsinline=1`;
-  }
-
-  tvPlayer.src = src;
-}
-
-function togglePower() {
-  isPowerOn = !isPowerOn;
-  if (isPowerOn) {
-    tvPlayer.style.display = 'block';
-    loadChannel(currentChannelIndex);
   } else {
-    tvPlayer.style.display = 'none';
-    tvPlayer.src = '';
-  }
-}
-
-function channelUp() {
-  loadChannel(currentChannelIndex + 1);
-}
-
-function channelDown() {
-  loadChannel(currentChannelIndex - 1);
-}
-
-function setVolume(vol) {
-  currentVolume = Math.min(Math.max(vol, 0), 100);
-  // Can't actually control iframe volume without YouTube API.
-}
-
-function volumeUp() {
-  setVolume(currentVolume + 10);
-}
-
-function volumeDown() {
-  setVolume(currentVolume - 10);
-}
-
-// Event Listeners
-channelButtons.forEach((btn, index) => {
-  btn.addEventListener('click', () => loadChannel(index));
-});
-
-powerBtn.addEventListener('click', togglePower);
-channelUpBtn.addEventListener('click', channelUp);
-channelDownBtn.addEventListener('click', channelDown);
-volUpBtn.addEventListener('click', volumeUp);
-volDownBtn.addEventListener('click', volumeDown);
-
-// Load first channel
-loadChannel(currentChannelIndex);
+    src = `https://www.youtube.com/embed/videoseries?list
