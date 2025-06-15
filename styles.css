@@ -7,8 +7,8 @@
 body {
   background-color: black;
   color: white;
-  font-family: 'Press Start 2P', monospace;
   text-align: center;
+  font-family: 'Press Start 2P', monospace;
   padding: 20px;
 }
 
@@ -16,76 +16,86 @@ body {
   position: relative;
   width: 100%;
   max-width: 600px;
-  margin: 0 auto;
   aspect-ratio: 4 / 3;
+  margin: 0 auto 20px;
 }
 
 .tv-screen {
   position: absolute;
-  top: 13%;
-  left: 12%;
-  width: 76%;
-  height: 72%;
+  top: 13.5%;
+  left: 12.5%;
+  width: 75%;
+  height: 70%;
   background: black;
   overflow: hidden;
-  z-index: 2;
   border-radius: 8px;
+  z-index: 1;
 }
 
-#tvPlayerWrapper, #tvPlayer {
+#tvPlayerWrapper {
   width: 100%;
   height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+#tvPlayer, #nonYoutubePlayer {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
   border: none;
+}
+
+#nonYoutubePlayer {
+  display: none;
 }
 
 .tv-frame {
   width: 100%;
+  z-index: 2;
   position: relative;
-  z-index: 1;
   pointer-events: none;
 }
 
-.channel-buttons {
-  margin: 20px 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-}
-
-.channel-buttons button {
-  background: #444;
-  color: white;
-  border: none;
-  padding: 8px 14px;
-  font-size: 12px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.channel-buttons button.active {
-  background: red;
-}
-
 .remote-buttons {
-  margin-top: 20px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
+  margin-top: 20px;
 }
 
 .remote-buttons button {
-  background: #222;
+  background: #333;
   color: white;
-  border: 1px solid #999;
-  padding: 8px 12px;
-  border-radius: 5px;
+  border: 1px solid #666;
+  padding: 10px 16px;
+  font-size: 12px;
+  border-radius: 4px;
   cursor: pointer;
+}
+
+.channel-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px auto;
+}
+
+.channel-buttons button {
+  background: #555;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.channel-buttons button.active {
+  background-color: red;
 }
 
 @media (max-width: 600px) {
@@ -93,15 +103,8 @@ body {
     max-width: 95vw;
   }
 
-  .tv-screen {
-    top: 14%;
-    left: 11%;
-    width: 78%;
-    height: 72%;
-  }
-
-  .channel-buttons,
-  .remote-buttons {
+  .remote-buttons,
+  .channel-buttons {
     flex-direction: column;
     gap: 8px;
   }
