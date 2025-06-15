@@ -3,40 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Rosemary's TV</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Retro TV Web App</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <h1>Rosemary's TV</h1>
-  <p>Watch some of her favorites</p>
-
-  <div class="tv-wrapper" id="tvWrapper">
-    <div class="screen" id="tvContainer">
+  <div class="main-container">
+    <div class="tv-wrapper" id="tvWrapper">
       <div id="tvPlayerWrapper">
         <div id="tvPlayer"></div>
         <iframe
           id="nonYoutubePlayer"
           frameborder="0"
           allowfullscreen
-          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none;"
           src=""
+          style="display:none;"
         ></iframe>
+      </div>
+
+      <img src="TVRETRO.png" alt="retro tv" class="tv-frame" />
+
+      <div class="tv-buttons">
+        <button id="powerBtn">POWER</button>
+        <button id="channelUpBtn">CH ▲</button>
+        <button id="channelDownBtn">CH ▼</button>
+        <button id="volumeUpBtn">VOL ▲</button>
+        <button id="volumeDownBtn">VOL ▼</button>
+        <button id="muteBtn">MUTE</button>
+        <button id="pauseBtn">PAUSE</button>
+        <button id="rewindBtn">⏪</button>
+        <button id="fastForwardBtn">⏩</button>
       </div>
     </div>
 
     <div id="tvGuide"></div>
-
-    <div class="tv-buttons">
-      <button id="powerBtn">POWER</button>
-      <button id="channelUpBtn">CH ▲</button>
-      <button id="channelDownBtn">CH ▼</button>
-      <button id="volumeUpBtn">VOL ▲</button>
-      <button id="volumeDownBtn">VOL ▼</button>
-      <button id="muteBtn">MUTE</button>
-      <button id="pauseBtn">PAUSE/PLAY</button>
-      <button id="rewindBtn">⏪ 10s</button>
-      <button id="fastForwardBtn">⏩ 10s</button>
-    </div>
   </div>
 
   <script src="https://www.youtube.com/iframe_api"></script>
