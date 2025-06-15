@@ -63,4 +63,60 @@ function loadChannel(index) {
   } else if (playlistId.startsWith('PL')) {
     src = `https://www.youtube.com/embed/videoseries?list=${playlistId}&autoplay=1&controls=0&loop=1&mute=0&playsinline=1`;
   } else {
-    src = `https://www.youtube.com/embed/videoseries?list
+    src = `https://www.youtube.com/embed/videoseries?list=${playlistId}&autoplay=1&controls=0&loop=1&mute=0&playsinline=1`;
+  }
+
+  tvPlayer.src = src;
+
+  setTimeout(() => {
+    setVolume(currentVolume);
+  }, 1000);
+}
+
+function setVolume(volumePercent) {
+  currentVolume = Math.min(Math.max(volumePercent, 0), 100);
+  // Volume change via API not supported without Iframe API
+}
+
+function togglePower() {
+  isPowerOn = !isPowerOn;
+  if (isPowerOn) {
+    tvPlayer.style.display = 'block';
+    loadChannel(currentChannelIndex);
+  } else {
+    tvPlayer.style.display = 'none';
+    tvPlayer.src = '';
+  }
+}
+
+function channelUp() {
+  loadChannel(currentChannelIndex + 1);
+}
+
+function channelDown() {
+  loadChannel(currentChannelIndex - 1);
+}
+
+function volumeUp() {
+  setVolume(currentVolume + 10);
+}
+
+function volumeDown() {
+  setVolume(currentVolume - 10);
+}
+
+// Remote button click handlers
+channelButtons.forEach((button, idx) => {
+  button.addEventListener('click', () => {
+    loadChannel(idx);
+  });
+});
+
+powerBtn.addEventListener('click', togglePower);
+volUpBtn.addEventListener('click', volumeUp);
+volDownBtn.addEventListener('click', volumeDown);
+channelUpBtn.addEventListener('click', channelUp);
+channelDownBtn.addEventListener('click', channelDown);
+
+// Load first channel by default
+loadChannel(currentChannelIndex);
