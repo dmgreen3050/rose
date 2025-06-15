@@ -1,5 +1,3 @@
-/* Classic clean style */
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -7,125 +5,108 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background: #000;
-  color: #eee;
+  background-color: black;
+  color: white;
   text-align: center;
+  font-family: monospace;
   padding: 20px;
-  user-select: none;
-}
-
-h1 {
-  margin-bottom: 20px;
-  font-weight: bold;
-  font-size: 2.5rem;
-  letter-spacing: 1.5px;
-  color: #ff0000;
-  text-shadow: 0 0 10px #ff0000;
 }
 
 .tv-wrapper {
   position: relative;
-  width: 600px;
-  max-width: 90vw;
-  aspect-ratio: 3 / 2;
-  margin: 0 auto 30px;
-}
-
-.tv-frame {
   width: 100%;
-  height: 100%;
-  display: block;
-  user-select: none;
-  pointer-events: none;
+  max-width: 600px;
+  aspect-ratio: 4 / 3;
+  margin: 0 auto 20px;
 }
 
-#tvContainer {
+.tv-screen {
   position: absolute;
-  top: 19%;
-  left: 13%;
-  width: 74%;
-  height: 62%;
+  top: 13.5%;
+  left: 12.5%;
+  width: 75%;
+  height: 63%;
   background: black;
   overflow: hidden;
-  border-radius: 10px;
-  box-shadow: inset 0 0 20px #ff0000;
+  border-radius: 8px;
+  z-index: 1;
+}
+
+#tvPlayerWrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 1;
 }
 
 #tvPlayer, #nonYoutubePlayer {
+  position: absolute;
+  top: 0; left: 0;
   width: 100%;
   height: 100%;
   border: none;
-  display: block;
 }
 
 #nonYoutubePlayer {
   display: none;
 }
 
+.tv-frame {
+  width: 100%;
+  z-index: 2;
+  position: relative;
+  pointer-events: none;
+}
+
+/* Remote */
 .remote-buttons {
-  max-width: 600px;
-  margin: 0 auto 25px;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
   justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 .remote-buttons button {
-  background-color: #ff0000;
-  border: none;
-  border-radius: 6px;
+  background: #333;
   color: white;
-  font-weight: 700;
-  font-size: 1rem;
+  border: 1px solid #666;
   padding: 10px 16px;
+  font-size: 14px;
+  border-radius: 4px;
   cursor: pointer;
-  box-shadow: 0 3px 6px #800000;
-  transition: background-color 0.2s ease;
-  user-select: none;
-}
-
-.remote-buttons button:hover {
-  background-color: #ff5555;
 }
 
 .channel-buttons {
-  max-width: 600px;
-  margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
   justify-content: center;
+  gap: 12px;
+  margin: 20px auto;
 }
 
 .channel-buttons button {
-  background-color: #222;
-  border: 2px solid #ff0000;
-  border-radius: 18px;
-  color: #ff0000;
-  font-weight: 700;
-  font-size: 1rem;
-  padding: 10px 20px;
+  background: #555;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  font-size: 14px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.25s ease;
-  user-select: none;
 }
 
-.channel-buttons button:hover,
 .channel-buttons button.active {
-  background-color: #ff0000;
-  color: #000;
+  background-color: red;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .tv-wrapper {
-    width: 100vw;
-    aspect-ratio: 3 / 2;
+    max-width: 95vw;
   }
-  .remote-buttons button,
-  .channel-buttons button {
-    font-size: 0.85rem;
-    padding: 8px 14px;
+
+  .remote-buttons,
+  .channel-buttons {
+    flex-direction: column;
+    gap: 8px;
   }
 }
