@@ -145,4 +145,7 @@ document.getElementById('rewindBtn').onclick = () => {
   player.seekTo(Math.max(0, player.getCurrentTime() - 10), true);
 };
 
-document.g
+document.getElementById('fastForwardBtn').onclick = () => {
+  if (!player) return;
+  player.seekTo(Math.min(player.getDuration(), player.getCurrentTime() + 10), true);
+};
