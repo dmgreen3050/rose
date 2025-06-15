@@ -12,12 +12,12 @@ let currentChannel = 0;
 let isPoweredOn = false;
 let player;
 let playerReady = false;
+let pendingChannel = null;
 
 function isYouTubeURL(url) {
   return url.includes("youtube.com") || url.includes("youtu.be");
 }
 
-// YouTube iframe API callback
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('tvPlayer', {
     height: '360',
@@ -40,7 +40,12 @@ function onYouTubeIframeAPIReady() {
 function onPlayerReady(event) {
   playerReady = true;
   if (isPoweredOn) {
-    loadChannel(currentChannel);
+    if (pendingChannel !== null) {
+      loadChannel(pendingChannel);
+      pendingChannel = null;
+    } else {
+      loadChannel(currentChannel);
+    }
   }
 }
 
@@ -51,6 +56,7 @@ function onPlayerError(event) {
 function loadChannel(index) {
   if (!isPoweredOn) return;
 
+  // Save current channel
   currentChannel = index % channels.length;
   const url = channels[currentChannel];
 
@@ -58,16 +64,16 @@ function loadChannel(index) {
   const nonYtIframe = document.getElementById('nonYoutubePlayer');
 
   if (isYouTubeURL(url)) {
-    // Show YouTube iframe, hide other
+    // Show YouTube iframe, hide non-YT iframe
     ytIframe.style.display = 'block';
     nonYtIframe.style.display = 'none';
 
     if (!playerReady) {
-      // wait for playerReady, will load channel on ready
+      // Save for loading later when ready
+      pendingChannel = currentChannel;
       return;
     }
 
-    // Extract playlist or video id
     const listId = new URL(url).searchParams.get("list");
     const videoId = getVideoIdFromUrl(url);
 
@@ -76,20 +82,20 @@ function loadChannel(index) {
     } else if (videoId) {
       player.loadVideoById(videoId);
     } else {
-      player.cueVideoById(url);
+      // fallback: just load URL in iframe (rare case)
+      ytIframe.src = url;
     }
   } else {
-    // Non-YouTube: hide YouTube iframe, show non-YT iframe with src
+    // Non-YouTube link — hide YT iframe, show other
     ytIframe.style.display = 'none';
     nonYtIframe.style.display = 'block';
-    playerReady = false; // player irrelevant here
+    playerReady = false; // irrelevant here
 
     nonYtIframe.src = url;
   }
 }
 
 function getVideoIdFromUrl(url) {
-  // match video id from various YouTube url formats
   const match = url.match(/(?:embed\/|v=|\/v\/|youtu\.be\/)([^&?/]+)/);
   return match ? match[1] : null;
 }
@@ -103,9 +109,8 @@ function powerToggle() {
     if (player && playerReady) {
       player.stopVideo();
     }
-    // clear iframe srcs
     document.getElementById('tvPlayer').style.display = 'none';
-    document.getElementById('tvPlayer').src = '';
+    // Do NOT set src = '' on YouTube iframe or API breaks
     const nonYtIframe = document.getElementById('nonYoutubePlayer');
     nonYtIframe.style.display = 'none';
     nonYtIframe.src = '';
