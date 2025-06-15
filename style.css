@@ -136,6 +136,7 @@ h1, p {
 #channelUpRemote,
 #channelDownRemote,
 #volumeUpRemote,
+#volumeDownRemote,
 #muteRemote {
   background-color: #36454F;
   border-radius: 8px;
