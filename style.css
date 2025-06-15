@@ -1,33 +1,163 @@
-/* Existing styles here ... */
+/* Import Google Font for retro pixel */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
+/* Reset and base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: radial-gradient(circle at center, #000000 0%, #0a0a0a 100%);
+  color: #f0f0d8;
+  font-family: 'Press Start 2P', monospace, monospace;
+  text-align: center;
+  padding: 20px;
+  user-select: none;
+}
+
+/* TV Wrapper */
+.tv-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  aspect-ratio: 4 / 3;
+  margin: 0 auto 30px;
+  border: 12px solid #222;
+  border-radius: 30px 30px 50px 50px / 30px 30px 70px 70px;
+  background: linear-gradient(145deg, #555, #222);
+  box-shadow:
+    inset 0 0 20px 2px #0f0,
+    0 10px 20px 3px rgba(0,255,0,0.2);
+  overflow: hidden;
+}
+
+/* Scanline overlay */
+.tv-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0,255,0,0.05) 0,
+      rgba(0,255,0,0.05) 1px,
+      transparent 2px,
+      transparent 4px
+    );
+  mix-blend-mode: screen;
+  z-index: 3;
+}
+
+/* Screen */
+.tv-screen {
+  position: absolute;
+  top: 14%;
+  left: 13%;
+  width: 74%;
+  height: 72%;
+  background: #000;
+  border: 4px solid #0f0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 15px #0f0aaaff inset;
+  z-index: 2;
+}
+
+/* iframe player */
+#tvPlayer {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  filter: drop-shadow(0 0 5px #0f0);
+}
+
+/* Channel buttons container */
+.channel-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px auto;
+  max-width: 600px;
+}
+
+/* Channel buttons */
+.channel-buttons button {
+  background: #003300;
+  color: #aaffaa;
+  border: 2px solid #00ff00;
+  padding: 10px 16px;
+  font-size: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: 'Press Start 2P', monospace;
+  text-shadow: 0 0 2px #00ff00;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  user-select: none;
+  flex: 1 1 120px;
+}
+
+.channel-buttons button.active,
+.channel-buttons button:hover {
+  background: #00ff00;
+  color: #003300;
+  box-shadow: 0 0 8px #00ff00;
+}
+
+/* Remote buttons */
 .remote-buttons {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
+  gap: 12px;
   margin-top: 20px;
+  max-width: 600px;
 }
 
 .remote-buttons button {
-  background: #222;
-  color: white;
-  border: 1px solid #555;
-  padding: 10px 16px;
-  font-size: 14px;
-  border-radius: 4px;
+  background: #005500;
+  color: #aaffaa;
+  border: 2px solid #00ff00;
+  padding: 12px 18px;
+  font-size: 12px;
+  border-radius: 14px;
   cursor: pointer;
+  font-family: 'Press Start 2P', monospace;
+  text-shadow: 0 0 3px #00ff00;
+  transition: background-color 0.25s ease, box-shadow 0.25s ease;
   user-select: none;
-  transition: background-color 0.2s ease;
+  flex: 1 1 140px;
 }
 
 .remote-buttons button:hover {
-  background-color: #444;
+  background: #00ff00;
+  color: #003300;
+  box-shadow: 0 0 10px #00ff00;
 }
 
 @media (max-width: 600px) {
-  /* keep your existing responsive styles */
-  .remote-buttons {
-    flex-direction: column;
-    gap: 8px;
+  .tv-wrapper {
+    max-width: 95vw;
+    border-width: 8px;
+    border-radius: 20px 20px 40px 40px / 20px 20px 60px 60px;
+  }
+
+  .channel-buttons button,
+  .remote-buttons button {
+    flex: 1 1 100%;
+    font-size: 9px;
+    padding: 10px 12px;
+  }
+
+  .tv-screen {
+    top: 16%;
+    left: 12%;
+    width: 76%;
+    height: 70%;
   }
 }
