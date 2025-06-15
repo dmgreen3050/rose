@@ -1,188 +1,138 @@
-/* Reset & base */
+/* Reset and body */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 body {
-  background: #000; /* dark retro vibe */
-  color: #fff;
-  font-family: 'Arial Black', Arial, sans-serif;
+  background-color: black;
+  color: white;
+  font-family: sans-serif;
   text-align: center;
-  min-height: 100vh;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1rem;
-}
-
-h1, p {
-  margin-bottom: 1rem;
-}
-
-/* App container flex to hold TV, Guide, Remote side by side */
-.app-container {
-  display: flex;
-  gap: 20px;
-  max-width: 1200px;
-  width: 100%;
+  min-height: 100vh;
   justify-content: center;
-  align-items: flex-start;
 }
 
-/* TV wrapper: relative positioning for the screen and frame */
+/* TV Wrapper */
 .tv-wrapper {
-  position: relative;
-  width: 640px;
-  height: 400px;
-  flex-shrink: 0;
-}
-
-/* The screen area inside the TV */
-#tvPlayerWrapper {
-  position: absolute;
-  top: 50px;  /* adjust to fit inside the TV frame */
-  left: 48px;
-  width: 544px; /* fits nicely inside your TV image */
-  height: 306px;
-  background: black;
-  box-shadow: 0 0 30px #222 inset;
-  z-index: 2;
-  border: 8px solid #444;
-}
-
-/* Make the iframe fill the player */
-#tvPlayer {
-  width: 100%;
-  height: 100%;
-}
-
-/* Retro TV frame image styles */
-.tv-frame {
-  width: 100%;
-  height: 100%;
-  display: block;
-  z-index: 1;
-  position: relative;
-  user-select: none;
-  pointer-events: none;
-}
-
-/* TV Guide container - vertical sidebar with blue/yellow Dish style */
-.tv-guide {
-  width: 240px;
-  background: linear-gradient(180deg, #0033a0, #0055cc);
-  color: #ffdb00; /* bright yellow */
-  font-weight: bold;
-  font-size: 14px;
-  border-radius: 8px;
-  padding: 10px;
-  overflow-y: auto;
-  max-height: 400px;
-  box-shadow: 0 0 10px #0055cc;
-}
-
-/* Individual channel item */
-.channel-item {
+  width: 90vw;
+  max-width: 600px;
+  background: #111;
+  border: 8px solid #222;
+  border-radius: 15px;
+  box-shadow: 0 0 30px #0f0;
+  padding: 15px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  padding: 8px 10px;
-  margin-bottom: 5px;
+}
+
+/* TV Player */
+#tvPlayerWrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 aspect ratio */
+  background: black;
+  border: 5px solid #444;
+  border-radius: 12px;
+  margin-bottom: 15px;
+}
+#tvPlayer, #nonYoutubePlayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* TV Guide */
+#tvGuide {
+  width: 100%;
+  display: flex;
+  overflow-x: auto;
+  padding: 10px 0;
+  border-top: 2px solid #0046be;
+  border-bottom: 2px solid #ffd500;
+  background: linear-gradient(90deg, #0046be 0%, #0072ff 100%);
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: #ffd500 #0046be;
+}
+
+#tvGuide::-webkit-scrollbar {
+  height: 8px;
+}
+#tvGuide::-webkit-scrollbar-track {
+  background: #0046be;
+}
+#tvGuide::-webkit-scrollbar-thumb {
+  background-color: #ffd500;
+  border-radius: 10px;
+}
+
+.channel-item {
+  flex: 0 0 auto;
+  width: 80px;
+  margin: 0 8px;
   cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.25s ease;
+  padding: 8px 6px;
+  background: #003b9f;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #ffd500;
+  user-select: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  text-align: center;
 }
 
 .channel-item:hover {
-  background-color: #ffdb00;
-  color: #0033a0;
+  background-color: #ffd500;
+  color: #0046be;
 }
 
 .channel-item.active {
-  background-color: #ffdb00;
-  color: #0033a0;
-  font-weight: 900;
+  background-color: #ffd500;
+  color: #0046be;
+  font-weight: bold;
 }
 
-.channel-number, .channel-time {
-  width: 40px;
-  text-align: left;
+.channel-number {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 3px;
+}
+
+.channel-time {
+  font-size: 10px;
+  opacity: 0.8;
+  margin-bottom: 3px;
 }
 
 .channel-name {
-  flex-grow: 1;
-  text-align: left;
-  padding-left: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Remote buttons vertical stack */
-.remote-buttons {
+/* Control Buttons */
+.tv-buttons {
+  margin-top: 15px;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 10px;
-  max-height: 400px;
-  width: 120px;
-  background: #222;
-  border-radius: 10px;
-  padding: 10px;
-  color: #ffdb00;
-  font-weight: bold;
-  font-size: 14px;
-  box-shadow: 0 0 15px #ffdb00;
 }
 
-/* Remote buttons style */
-.remote-buttons button {
-  background: #0033a0;
+.tv-buttons button {
+  background: #0046be;
   border: none;
-  color: #ffdb00;
-  padding: 8px;
+  padding: 8px 12px;
   border-radius: 6px;
+  font-weight: bold;
+  color: #ffd500;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.remote-buttons button:hover {
-  background-color: #ffdb00;
-  color: #0033a0;
-}
-
-/* Responsive: on smaller screens, stack vertically */
-@media (max-width: 900px) {
-  .app-container {
-    flex-direction: column;
-    align-items: center;
-  }
-  .tv-wrapper {
-    width: 90vw;
-    height: auto;
-  }
-  #tvPlayerWrapper {
-    position: relative;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 56vw; /* 16:9 ratio */
-    max-height: 300px;
-  }
-  .tv-guide, .remote-buttons {
-    width: 90vw;
-    max-height: none;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 15px;
-  }
-  .channel-item {
-    width: 30%;
-    margin: 5px;
-  }
-  .remote-buttons {
-    flex-direction: row;
-    gap: 8px;
-  }
-  .remote-buttons button {
-    flex: 1 1 auto;
-  }
-}
+  transition: backgr
