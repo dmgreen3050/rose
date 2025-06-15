@@ -1,4 +1,4 @@
-/* Reset and Base Styles */
+/* Reset & basics */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -6,179 +6,166 @@
 }
 
 body {
-  font-family: 'Courier New', Courier, monospace;
-  background-color: black;
-  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #1a1a2e; /* deep blue-purple */
+  color: #f0e6f6; /* soft lavender */
   text-align: center;
-  overflow-x: hidden;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
-h1, p {
-  color: white;
-  margin-bottom: 10px;
+/* Titles */
+h1 {
+  font-size: 2.8rem;
+  margin-bottom: 0.25rem;
+  color: #f9c74f; /* bright gold */
+  text-shadow: 0 0 8px #f9c74f88;
+  user-select: none;
 }
 
-/* TV Wrapper */
+.subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: #b5b3c8;
+  font-style: italic;
+  user-select: none;
+}
+
+/* TV Wrapper & Frame */
 .tv-wrapper {
   position: relative;
-  width: 100%;
-  max-width: 600px;
-  margin: 20px auto;
-  z-index: 2;
+  width: 600px;
+  max-width: 90vw;
+  margin: 0 auto 1.5rem auto;
 }
 
 .tv-frame {
   width: 100%;
   display: block;
-  position: relative;
-  z-index: 3; /* Ensure it's above the video */
+  user-select: none;
 }
 
 #tvContainer {
   position: absolute;
-  top: 13.5%;
-  left: 12.5%;
-  width: 75%;
-  height: 60%;
+  top: 11.5%; /* tweak to fit screen area inside TV */
+  left: 11.5%;
+  width: 77%;
+  height: 68%;
+  background: black;
+  border-radius: 10px;
   overflow: hidden;
-  z-index: 1; /* Below frame */
-}
-
-#tvPlayerWrapper {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  z-index: 2; /* Between container and frame */
 }
 
 #tvPlayer,
 #nonYoutubePlayer {
   width: 100%;
   height: 100%;
-  border: none;
-  position: absolute;
-  top: 0;
-  left: 0;
+  background: black;
 }
 
-/* TV Guide */
-.tv-guide {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  background-color: #001f3f;
-  padding: 10px;
-  border-top: 2px solid #FFDC00;
-  margin-top: 20px;
+/* NOW PLAYING */
+.now-playing {
+  font-weight: 600;
+  font-size: 1.15rem;
+  margin-bottom: 1rem;
+  color: #f9c74f;
+  text-shadow: 0 0 6px #f9c74faa;
+  user-select: none;
 }
 
-.channel-item {
-  background-color: #0074D9;
-  color: #FFDC00;
-  border: 2px solid #FFDC00;
-  margin: 5px;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-family: monospace;
-  min-width: 120px;
-  text-align: center;
-  transition: transform 0.2s ease;
-  cursor: pointer;
-  box-shadow: 0 0 8px #FFDC00;
-}
-
-.channel-item:hover {
-  transform: scale(1.05);
-  background-color: #005fa3;
-}
-
-.channel-item.active {
-  background-color: #FFDC00;
-  color: #001f3f;
-  border-color: #0074D9;
-  box-shadow: 0 0 12px #FFDC00, inset 0 0 8px #0074D9;
-}
-
-.channel-number,
-.channel-time,
-.channel-name {
-  display: block;
-  font-size: 0.85em;
-}
-
-/* Remote Buttons */
+/* Remote Buttons container */
 .remote-buttons {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
-  margin: 20px auto;
-  padding: 10px;
+  gap: 8px;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-.remote-buttons button {
-  background-color: #333;
-  color: #fff;
-  border: 1px solid #666;
-  padding: 8px 14px;
-  font-size: 14px;
-  border-radius: 4px;
+/* Basic button style */
+.remote-btn {
+  background: #4a4e69; /* muted purple */
+  border: none;
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #f0e6f6;
+  box-shadow: 0 5px #3f4164;
   cursor: pointer;
-  transition: background-color 0.2s;
+  user-select: none;
+  transition: background 0.3s ease, transform 0.1s ease;
+  min-width: 80px;
 }
 
-.remote-buttons button:hover {
-  background-color: #555;
+.remote-btn:hover {
+  background: #6c63ff;
+  box-shadow: 0 6px #5a54e8;
+  color: white;
 }
 
-/* Now Playing Marquee */
-.now-playing {
-  background-color: #001f3f;
-  color: #FFDC00;
-  font-size: 1em;
-  padding: 10px;
-  font-family: monospace;
-  border-top: 2px solid #FFDC00;
-  white-space: nowrap;
-  overflow: hidden;
-  box-shadow: 0 0 10px #FFDC00;
-  display: none;
+.remote-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 3px #3f4164;
 }
 
-.now-playing span {
-  display: inline-block;
-  padding-left: 100%;
-  animation: marquee 12s linear infinite;
+/* Channel Buttons container */
+.channel-shortcuts {
+  margin-top: 15px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
 }
 
-@keyframes marquee {
-  0%   { transform: translateX(0%); }
-  100% { transform: translateX(-100%); }
+/* Channel buttons style */
+.channel-shortcuts button {
+  background: #f9c74f; /* gold */
+  border: none;
+  border-radius: 20px;
+  padding: 10px 22px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #1a1a2e;
+  box-shadow: 0 5px #c2a83f;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.25s ease, transform 0.1s ease;
+  min-width: 110px;
 }
 
-/* Responsive Design */
-@media (max-width: 600px) {
-  #tvContainer {
-    top: 12%;
-    left: 10%;
-    width: 80%;
-    height: 64%;
-  }
+.channel-shortcuts button:hover {
+  background: #f4d35e;
+  box-shadow: 0 6px #b99830;
+  color: #000;
+}
 
+.channel-shortcuts button:active {
+  transform: translateY(2px);
+  box-shadow: 0 3px #c2a83f;
+}
+
+/* Responsive */
+@media (max-width: 650px) {
   .tv-wrapper {
-    max-width: 95vw;
+    width: 100%;
   }
 
-  .tv-guide {
-    display: none;
+  .remote-btn {
+    min-width: 65px;
+    padding: 10px 14px;
+    font-size: 0.9rem;
   }
 
-  .now-playing {
-    display: block;
-  }
-
-  .remote-buttons {
-    flex-direction: column;
-    gap: 8px;
+  .channel-shortcuts button {
+    min-width: 90px;
+    padding: 8px 16px;
+    font-size: 0.85rem;
   }
 }
