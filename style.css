@@ -41,18 +41,20 @@ p {
   box-shadow: 0 0 20px #444;
 }
 
+/* Screen container - perfectly positioned inside tv frame */
 #tvContainer {
   position: absolute;
-  top: 18.5%;
-  left: 12.5%;
-  width: 75%;
-  height: 63%;
+  top: 19%;    /* Adjust these values carefully to fit your TVRETRO.png */
+  left: 13%;
+  width: 74%;
+  height: 62%;
   border-radius: 10px;
   overflow: hidden;
   background: black;
   box-shadow: inset 0 0 8px #222;
 }
 
+/* Player & iframe full size */
 #tvPlayer,
 #nonYoutubePlayer {
   width: 100%;
@@ -62,29 +64,23 @@ p {
   background: black;
 }
 
+/* Hide external iframe by default */
 #nonYoutubePlayer {
   display: none;
 }
 
-.now-playing {
-  font-family: monospace;
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: #ccc;
-  font-style: normal;
-}
-
-.remote-buttons {
-  margin: 15px auto;
+/* Buttons style */
+.remote-buttons, .channel-buttons {
   max-width: 600px;
+  margin: 15px auto;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
   justify-content: center;
 }
 
-.remote-buttons button {
+.remote-buttons button,
+.channel-buttons button {
   background: #222;
   border: 2px solid #555;
   border-radius: 6px;
@@ -97,40 +93,12 @@ p {
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.remote-buttons button:hover {
+.remote-buttons button:hover,
+.channel-buttons button:hover,
+.channel-buttons button.active {
   background-color: #555;
   color: white;
   border-color: #888;
-}
-
-.channel-buttons {
-  margin: 20px auto;
-  max-width: 600px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: center;
-}
-
-.channel-buttons button {
-  background: #222;
-  border: 2px solid #666;
-  border-radius: 20px;
-  padding: 10px 22px;
-  font-family: monospace;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #ddd;
-  cursor: pointer;
-  box-shadow: inset 0 0 5px #333;
-  transition: background-color 0.15s ease, color 0.15s ease;
-}
-
-.channel-buttons button:hover,
-.channel-buttons button.active {
-  background-color: #ddd;
-  color: #111;
-  border-color: #aaa;
 }
 
 @media (max-width: 480px) {
