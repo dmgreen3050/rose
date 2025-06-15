@@ -1,138 +1,178 @@
-/* Reset and body */
+/* Reset and base */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
+
 body {
   background-color: black;
   color: white;
-  font-family: sans-serif;
-  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   padding: 20px;
+}
+
+.main-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
+  flex-wrap: wrap;
   justify-content: center;
+  gap: 20px;
+  min-height: 100vh;
+  align-items: flex-start;
 }
 
 /* TV Wrapper */
 .tv-wrapper {
-  width: 90vw;
-  max-width: 600px;
-  background: #111;
-  border: 8px solid #222;
-  border-radius: 15px;
-  box-shadow: 0 0 30px #0f0;
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  position: relative;
+  width: 640px;
+  max-width: 90vw;
+  aspect-ratio: 16 / 9;
+  background: black;
+  flex-shrink: 0;
 }
 
-/* TV Player */
+/* Video container inside TV */
 #tvPlayerWrapper {
-  position: relative;
-  width: 100%;
-  padding-top: 56.25%; /* 16:9 aspect ratio */
+  position: absolute;
+  top: 12.5%;
+  left: 12.5%;
+  width: 75%;
+  height: 75%;
+  overflow: hidden;
+  border-radius: 4px;
   background: black;
-  border: 5px solid #444;
-  border-radius: 12px;
-  margin-bottom: 15px;
+  z-index: 2;
 }
-#tvPlayer, #nonYoutubePlayer {
+
+/* YouTube player and iframe */
+#tvPlayer,
+#nonYoutubePlayer {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+/* Retro TV PNG frame */
+.tv-frame {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  pointer-events: none;
+  z-index: 5;
 }
 
-/* TV Guide */
-#tvGuide {
-  width: 100%;
-  display: flex;
-  overflow-x: auto;
-  padding: 10px 0;
-  border-top: 2px solid #0046be;
-  border-bottom: 2px solid #ffd500;
-  background: linear-gradient(90deg, #0046be 0%, #0072ff 100%);
-  box-sizing: border-box;
-  scrollbar-width: thin;
-  scrollbar-color: #ffd500 #0046be;
-}
-
-#tvGuide::-webkit-scrollbar {
-  height: 8px;
-}
-#tvGuide::-webkit-scrollbar-track {
-  background: #0046be;
-}
-#tvGuide::-webkit-scrollbar-thumb {
-  background-color: #ffd500;
-  border-radius: 10px;
-}
-
-.channel-item {
-  flex: 0 0 auto;
-  width: 80px;
-  margin: 0 8px;
-  cursor: pointer;
-  padding: 8px 6px;
-  background: #003b9f;
-  border-radius: 6px;
-  font-size: 12px;
-  color: #ffd500;
-  user-select: none;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  text-align: center;
-}
-
-.channel-item:hover {
-  background-color: #ffd500;
-  color: #0046be;
-}
-
-.channel-item.active {
-  background-color: #ffd500;
-  color: #0046be;
-  font-weight: bold;
-}
-
-.channel-number {
-  font-weight: bold;
-  font-size: 14px;
-  margin-bottom: 3px;
-}
-
-.channel-time {
-  font-size: 10px;
-  opacity: 0.8;
-  margin-bottom: 3px;
-}
-
-.channel-name {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Control Buttons */
+/* TV control buttons */
 .tv-buttons {
-  margin-top: 15px;
+  margin-top: 10px;
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 640px;
+  z-index: 10;
 }
 
 .tv-buttons button {
-  background: #0046be;
-  border: none;
+  background: #004a99;
+  color: #ffd700;
+  border: 2px solid #ffd700;
   padding: 8px 12px;
+  font-weight: 600;
   border-radius: 6px;
-  font-weight: bold;
-  color: #ffd500;
   cursor: pointer;
-  transition: backgr
+  transition: background 0.3s;
+  user-select: none;
+}
+
+.tv-buttons button:hover {
+  background: #0066cc;
+  color: white;
+  border-color: #ffea00;
+}
+
+/* TV Guide container */
+#tvGuide {
+  width: 280px;
+  max-width: 90vw;
+  background: #003366;
+  color: #ffd700;
+  border: 3px solid #ffd700;
+  border-radius: 8px;
+  font-size: 14px;
+  overflow-y: auto;
+  max-height: 400px;
+  padding: 10px;
+  box-sizing: border-box;
+  font-weight: 700;
+  box-shadow: 0 0 15px #ffea00;
+  flex-shrink: 0;
+}
+
+/* Each channel item */
+.channel-item {
+  display: flex;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 8px 6px;
+  border-bottom: 1px solid #ffea0050;
+  cursor: pointer;
+  align-items: center;
+  transition: background 0.25s;
+}
+
+.channel-item:last-child {
+  border-bottom: none;
+}
+
+.channel-item:hover {
+  background: #ffd700cc;
+  color: #003366;
+}
+
+/* Active channel highlight */
+.channel-item.active {
+  background: #ffd700;
+  color: #003366;
+  box-shadow: 0 0 10px #ffea00;
+  font-weight: 900;
+}
+
+.channel-number,
+.channel-time {
+  min-width: 40px;
+  text-align: center;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.channel-name {
+  flex-grow: 1;
+  font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .main-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tv-wrapper {
+    width: 90vw;
+    aspect-ratio: 16 / 9;
+    margin-bottom: 15px;
+  }
+
+  #tvGuide {
+    width: 90vw;
+    max-height: 300px;
+    font-size: 12px;
+  }
+
+  .tv-buttons {
+    max-width: 90vw;
+  }
+}
