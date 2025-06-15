@@ -47,9 +47,9 @@ let player;
 let currentChannel = 0;
 let isMuted = false;
 
-// Populate TV guide dynamically
 const tvGuide = document.getElementById('tvGuide');
 
+// Populate TV guide dynamically
 channels.forEach((ch, i) => {
   const btn = document.createElement('div');
   btn.classList.add('channel-item');
@@ -69,7 +69,7 @@ function updateGuideHighlight() {
   });
 }
 
-// YouTube API requires global function
+// YouTube API global function
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('tvPlayer', {
     height: '100%',
@@ -103,7 +103,7 @@ function switchChannel(index) {
   }
 }
 
-// Control buttons
+// Control buttons wiring
 document.getElementById('powerBtn').addEventListener('click', () => {
   if(player && player.getPlayerState() !== YT.PlayerState.ENDED){
     if(player.isMuted()) player.unMute();
@@ -170,5 +170,5 @@ document.getElementById('fastForwardBtn').addEventListener('click', () => {
 });
 
 function onPlayerStateChange(event) {
-  // Optional: handle state changes here if needed
+  // Optional: handle player state changes here
 }
