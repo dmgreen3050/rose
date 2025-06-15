@@ -21,6 +21,11 @@ const channelUpBtn = document.getElementById('channelUpBtn');
 const channelDownBtn = document.getElementById('channelDownBtn');
 const muteToggleBtn = document.getElementById('muteToggleBtn');
 
+// New remote control buttons
+const pauseBtn = document.getElementById('pauseRemote');
+const rewindBtn = document.getElementById('rewindRemote');
+const fastForwardBtn = document.getElementById('fastForwardRemote');
+
 let player;
 let currentChannelIndex = 0;
 let isPowerOn = false;
@@ -72,7 +77,9 @@ function onPlayerReady(event) {
   updateMuteButton();
 }
 
-function onPlayerStateChange(event) {}
+function onPlayerStateChange(event) {
+  // Optional: You can add logic here if you want to react to video state changes
+}
 
 function loadChannel(index) {
   if (!player) return;
@@ -86,12 +93,17 @@ function loadChannel(index) {
 
   const channel = channels[index];
 
-  // ✅ If Seinfeld channel is selected
+  // Open watchseinfeld.net in a new tab for Seinfeld channel
   if (channel.name.toLowerCase() === 'seinfeld') {
     if (isPowerOn) {
       window.open('https://watchseinfeld.net', '_blank');
+      // Optionally hide the TV screen since external site opened
+      document.querySelector('.tv-screen').style.visibility = 'hidden';
     }
     return;
+  } else {
+    // Make sure TV screen visible for normal channels
+    document.querySelector('.tv-screen').style.visibility = 'visible';
   }
 
   const vidOrList = getVideoIdOrPlaylistId(channel);
@@ -161,6 +173,30 @@ function toggleMute() {
   updateMuteButton();
 }
 
+// New button functions
+function togglePause() {
+  if (!player) return;
+  const state = player.getPlayerState();
+  if (state === YT.PlayerState.PLAYING) {
+    player.pauseVideo();
+  } else {
+    player.playVideo();
+  }
+}
+
+function rewind10() {
+  if (!player) return;
+  const currentTime = player.getCurrentTime();
+  player.seekTo(Math.max(currentTime - 10, 0), true);
+}
+
+function fastForward10() {
+  if (!player) return;
+  const currentTime = player.getCurrentTime();
+  const duration = player.getDuration();
+  player.seekTo(Math.min(currentTime + 10, duration), true);
+}
+
 function updatePowerButton() {
   powerBtn.textContent = isPowerOn ? 'Power Off' : 'Power On';
 }
@@ -169,12 +205,17 @@ function updateMuteButton() {
   muteToggleBtn.textContent = player.isMuted() ? 'Unmute' : 'Mute';
 }
 
+// Event listeners
 powerBtn.addEventListener('click', togglePower);
 volUpBtn.addEventListener('click', volumeUp);
 volDownBtn.addEventListener('click', volumeDown);
 channelUpBtn.addEventListener('click', channelUp);
 channelDownBtn.addEventListener('click', channelDown);
 muteToggleBtn.addEventListener('click', toggleMute);
+
+pauseBtn.addEventListener('click', togglePause);
+rewindBtn.addEventListener('click', rewind10);
+fastForwardBtn.addEventListener('click', fastForward10);
 
 channelButtons.forEach((btn, idx) => {
   btn.addEventListener('click', () => {
