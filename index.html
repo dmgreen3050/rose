@@ -1,105 +1,61 @@
-/* Reset & basics */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rosemary's TV</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Rosemary's TV</h1>
+  <p>Watch some of her favorites</p>
 
-body {
-  background-color: #000;
-  color: #0f0;
-  font-family: 'Courier New', Courier, monospace;
-  text-align: center;
-  padding: 20px;
-  user-select: none;
-}
+  <div class="tv-wrapper" id="tvWrapper">
 
-/* TV wrapper & screen */
-.tv-wrapper {
-  position: relative;
-  width: 90vw;
-  max-width: 660px;
-  margin: 0 auto 40px;
-}
+    <div class="tv-screen-wrapper">
+      <div id="tvPlayerWrapper">
+        <div id="tvPlayer"></div>
+        <iframe
+          id="nonYoutubePlayer"
+          frameborder="0"
+          allowfullscreen
+          src=""
+          style="display:none"
+        ></iframe>
+      </div>
 
-.screen {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  background: #111;
-  border: 10px solid #444;
-  box-shadow: 0 0 30px #0f0;
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 20px;
-}
+      <img src="TVRETRO.png" alt="Retro TV Frame" class="tv-frame" />
+    </div>
 
-#tvPlayerWrapper {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
+    <div class="tv-buttons">
+      <button id="powerButton">Power</button>
+      <button id="channelUp">Channel ▲</button>
+      <button id="channelDown">Channel ▼</button>
+      <button id="volumeUp">Volume ▲</button>
+      <button id="volumeDown">Volume ▼</button>
+    </div>
+  </div>
 
-#tvPlayer,
-#nonYoutubePlayer {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-}
+  <div class="remote-buttons">
+    <button id="powerRemote">POWER</button>
+    <button id="channelUpRemote">CH ▲</button>
+    <button id="channelDownRemote">CH ▼</button>
+    <button id="volumeUpRemote">VOL ▲</button>
+    <button id="volumeDownRemote">VOL ▼</button>
+    <button id="muteRemote">MUTE</button>
+  </div>
 
-/* Retro TV frame image */
-.tv-frame {
-  width: 100%;
-  max-width: 660px;
-  margin: -360px auto 20px;
-  pointer-events: none;
-  user-select: none;
-  position: relative;
-  z-index: 10;
-}
+  <div class="remote">
+    <button id="goldenGirls" onclick="switchChannel(0)">Golden Girls</button>
+    <button id="christmasMovies" onclick="switchChannel(1)">Christmas Movies</button>
+    <button id="lifeTime" onclick="switchChannel(2)">Lifetime</button>
+    <button id="christmasMusic" onclick="switchChannel(3)">Christmas Music</button>
+    <button id="music" onclick="switchChannel(4)">Music</button>
+    <button id="seinfeld" onclick="switchChannel(5)">Seinfeld</button>
+    <button id="movies" onclick="switchChannel(6)">Movies</button>
+  </div>
 
-/* TV buttons on the TV itself */
-.tv-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-top: -10px;
-  user-select: none;
-  z-index: 20;
-  position: relative;
-}
-
-.tv-buttons button {
-  width: 70px;
-  height: 35px;
-  background-color: #111;
-  border: 2px solid #0f0;
-  border-radius: 6px;
-  cursor: pointer;
-  color: #0f0;
-  font-weight: bold;
-  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
-}
-
-.tv-buttons button:hover,
-.tv-buttons button:focus {
-  background-color: #0f0;
-  color: #000;
-  outline: none;
-  box-shadow: 0 0 10px #0f0;
-}
-
-/* Responsive adjustments */
-@media (max-width: 480px) {
-  .tv-buttons button {
-    width: 50px;
-    height: 28px;
-    font-size: 0.8rem;
-  }
-
-  .tv-frame {
-    margin: -220px auto 20px;
-  }
-}
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script src="script.js"></script>
+</body>
+</html>
