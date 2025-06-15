@@ -28,6 +28,15 @@ function updateGuide() {
   });
 }
 
+function updateNowPlaying() {
+  const nowPlayingEl = document.getElementById('nowPlayingText');
+  if (channels[currentChannel]) {
+    nowPlayingEl.textContent = `NOW PLAYING: ${channels[currentChannel].name} (${channels[currentChannel].time})`;
+  } else {
+    nowPlayingEl.textContent = 'NOW PLAYING: ';
+  }
+}
+
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('tvPlayer', {
     width: '100%',
@@ -64,6 +73,7 @@ function switchChannel(i) {
 
   currentChannel = i;
   updateGuide();
+  updateNowPlaying();
 
   document.getElementById('nonYoutubePlayer').style.display = 'none';
 
