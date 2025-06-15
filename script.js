@@ -18,7 +18,8 @@ function isYouTubeURL(url) {
   return url.includes("youtube.com") || url.includes("youtu.be");
 }
 
-function onYouTubeIframeAPIReady() {
+// This function MUST be on the window for YouTube API to call it
+window.onYouTubeIframeAPIReady = function() {
   player = new YT.Player('tvPlayer', {
     height: '360',
     width: '640',
@@ -35,7 +36,7 @@ function onYouTubeIframeAPIReady() {
       'onError': onPlayerError
     }
   });
-}
+};
 
 function onPlayerReady(event) {
   playerReady = true;
