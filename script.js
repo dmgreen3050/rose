@@ -1,17 +1,53 @@
 const channels = [
-  { number: "01", name: "Golden Girls", time: "8:00 PM", youtubePlaylistId: "PLnJVRTZlANm1EyaREpsWbmXRd34Y66yWV" },
-  { number: "02", name: "Christmas Movies", time: "9:00 PM", youtubePlaylistId: "PLnJVRTZlANm28rG20hiPLXHOievQ8O3Ls" },
-  { number: "03", name: "Lifetime", time: "10:00 PM", youtubePlaylistId: "PL7Sv7aQs2p0V1FlyUXXbVGekKW65j5QRq" },
-  { number: "04", name: "Christmas Music", time: "11:00 PM", youtubePlaylistId: "PLiquKSP6s-eFZj2HF0fhw41D5Argpn3_G" },
-  { number: "05", name: "Music", time: "12:00 AM", youtubePlaylistId: "PLnJVRTZlANm3L7JDiPnjIrP2zxEgbdlLJ" },
-  { number: "06", name: "Seinfeld", time: "1:00 AM", youtubePlaylistId: "SEINFELD" },
-  { number: "07", name: "Movies", time: "2:00 AM", youtubePlaylistId: "5fnsIjeByxQ" }
+  {
+    number: "01",
+    name: "Golden Girls",
+    time: "8:00 PM",
+    youtubePlaylistId: "PLnJVRTZlANm1EyaREpsWbmXRd34Y66yWV"
+  },
+  {
+    number: "02",
+    name: "Christmas Movies",
+    time: "9:00 PM",
+    youtubePlaylistId: "PLnJVRTZlANm28rG20hiPLXHOievQ8O3Ls"
+  },
+  {
+    number: "03",
+    name: "Lifetime",
+    time: "10:00 PM",
+    youtubePlaylistId: "PL7Sv7aQs2p0V1FlyUXXbVGekKW65j5QRq"
+  },
+  {
+    number: "04",
+    name: "Christmas Music",
+    time: "11:00 PM",
+    youtubePlaylistId: "PLiquKSP6s-eFZj2HF0fhw41D5Argpn3_G"
+  },
+  {
+    number: "05",
+    name: "Music",
+    time: "12:00 AM",
+    youtubePlaylistId: "PLnJVRTZlANm3L7JDiPnjIrP2zxEgbdlLJ"
+  },
+  {
+    number: "06",
+    name: "Seinfeld",
+    time: "1:00 AM",
+    youtubePlaylistId: "SEINFELD"
+  },
+  {
+    number: "07",
+    name: "Movies",
+    time: "2:00 AM",
+    youtubePlaylistId: "5fnsIjeByxQ"
+  }
 ];
 
 let player;
 let currentChannel = 0;
 let isMuted = false;
 
+// Populate TV guide dynamically
 const tvGuide = document.getElementById('tvGuide');
 
 channels.forEach((ch, i) => {
@@ -33,6 +69,7 @@ function updateGuideHighlight() {
   });
 }
 
+// YouTube API requires global function
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('tvPlayer', {
     height: '100%',
@@ -56,12 +93,24 @@ function switchChannel(index) {
   currentChannel = index;
   updateGuideHighlight();
   const ch = channels[index];
+
   if (!player) return;
 
   if (ch.youtubePlaylistId.length > 10) {
     player.loadPlaylist({ list: ch.youtubePlaylistId, listType: 'playlist', index: 0, suggestedQuality: 'medium' });
+    document.getElementById('nonYoutubePlayer').style.display = 'none';
+    document.getElementById('tvPlayer').style.display = 'block';
+  } else if (ch.youtubePlaylistId === 'SEINFELD') {
+    // Example for a non-YouTube video, just hiding YouTube player:
+    document.getElementById('tvPlayer').style.display = 'none';
+    const iframe = document.getElementById('nonYoutubePlayer');
+    iframe.style.display = 'block';
+    iframe.src = 'https://player.vimeo.com/video/76979871'; // example video
+    if(player) player.stopVideo();
   } else {
     player.loadVideoById(ch.youtubePlaylistId);
+    document.getElementById('nonYoutubePlayer').style.display = 'none';
+    document.getElementById('tvPlayer').style.display = 'block';
   }
 }
 
