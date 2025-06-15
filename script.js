@@ -111,7 +111,9 @@ function loadChannel(index) {
     });
   }
 
-  if (!isPowerOn) {
+  if (isPowerOn) {
+    player.playVideo();  // <-- explicit play to bypass Chrome/Safari autoplay restrictions
+  } else {
     player.pauseVideo();
   }
 }
@@ -124,8 +126,7 @@ function togglePower() {
 
   if (isPowerOn) {
     document.querySelector('.tv-screen').style.visibility = 'visible';
-    loadChannel(currentChannelIndex);
-    player.playVideo();
+    loadChannel(currentChannelIndex); // load channel and play video
   } else {
     player.pauseVideo();
     document.querySelector('.tv-screen').style.visibility = 'hidden';
