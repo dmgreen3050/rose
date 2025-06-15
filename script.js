@@ -1,9 +1,9 @@
 const channels = [
-  "PLnJVRTZlANm1EyaREpsWbmXRd34Y66yWV", // Golden Girls
-  "PLnJVRTZlANm28rG20hiPLXHOievQ8O3Ls", // Christmas Movies
-  "PLiquKSP6s-eFZj2HF0fhw41D5Argpn3_G", // Lifetime
-  "PL7Sv7aQs2p0V1FlyUXXbVGekKW65j5QRq", // Christmas Music
-  "PLnJVRTZlANm3L7JDiPnjIrP2zxEgbdlLJ", // Music
+  "PLnJVRTZlANm1EyaREpsWbmXRd34Y66yWV", // Golden Girls (playlist)
+  "PLnJVRTZlANm28rG20hiPLXHOievQ8O3Ls", // Christmas Movies (playlist)
+  "PLiquKSP6s-eFZj2HF0fhw41D5Argpn3_G", // Lifetime (playlist)
+  "PL7Sv7aQs2p0V1FlyUXXbVGekKW65j5QRq", // Christmas Music (playlist)
+  "PLnJVRTZlANm3L7JDiPnjIrP2zxEgbdlLJ", // Music (playlist)
   "SEINFELD",                            // Special case: open external site
   "5fnsIjeByxQ"                         // Single YouTube video ID
 ];
@@ -40,7 +40,7 @@ function onPlayerReady(event) {
 }
 
 function onPlayerStateChange(event) {
-  // You can add any state change logic here if needed
+  // Optional: handle player state changes if needed
 }
 
 function onPlayerError(event) {
@@ -177,7 +177,7 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById("volumeDown").addEventListener("click", volumeDown);
   document.getElementById("muteRemote").addEventListener("click", muteToggle);
 
-  // Also bind remote buttons
+  // Remote buttons
   document.getElementById("powerRemote").addEventListener("click", powerToggle);
   document.getElementById("channelUpRemote").addEventListener("click", channelUp);
   document.getElementById("channelDownRemote").addEventListener("click", channelDown);
