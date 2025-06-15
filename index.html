@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Rosemary's TV</title>
+  <title>Rosemary's Retro TV</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -12,28 +12,15 @@
 
   <div class="tv-wrapper">
     <div class="screen" id="tvContainer">
-      <div id="tvPlayerWrapper" style="position: relative; width: 640px; height: 360px; margin: 0 auto 20px; border: 10px solid #444; box-shadow: 0 0 30px #000;">
-        <iframe
-          id="tvPlayer"
-          width="640"
-          height="360"
-          frameborder="0"
-          allow="autoplay; encrypted-media"
-          allowfullscreen
-          src=""
-          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-        ></iframe>
-
-        <iframe
-          id="nonYoutubePlayer"
-          width="640"
-          height="360"
-          frameborder="0"
-          allowfullscreen
-          src=""
-          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none;"
-        ></iframe>
-      </div>
+      <iframe
+        id="tvPlayer"
+        width="640"
+        height="360"
+        frameborder="0"
+        allow="autoplay; encrypted-media"
+        allowfullscreen
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none;"
+      ></iframe>
     </div>
 
     <img src="TVRETRO.png" alt="retro tv" class="tv-frame" />
@@ -51,8 +38,6 @@
     <button id="powerRemote">POWER</button>
     <button id="channelUpRemote">CH ⬆</button>
     <button id="channelDownRemote">CH ⬇</button>
-    <button id="volumeUpRemote">VOL ⬆</button>
-    <button id="volumeDownRemote">VOL ⬇</button>
     <button id="muteRemote">MUTE</button>
   </div>
 
@@ -66,7 +51,6 @@
     <button onclick="switchChannel(6)">Movies</button>
   </div>
 
-  <script src="https://www.youtube.com/iframe_api"></script>
   <script src="script.js"></script>
 </body>
 </html>
