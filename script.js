@@ -12,27 +12,24 @@ let player;
 let currentChannel = -1;
 let volume = 50;
 
-const tvGuide = document.getElementById('tvGuide');
+const channelButtonsContainer = document.getElementById('channelButtons');
 const nonYoutubePlayer = document.getElementById('nonYoutubePlayer');
 
-// Build channel buttons (like Roku quick buttons)
 channels.forEach((ch, i) => {
   const btn = document.createElement('button');
   btn.className = 'channel-btn';
   btn.textContent = ch.name;
   btn.title = `Channel ${ch.number}`;
   btn.onclick = () => switchChannel(i);
-  tvGuide.appendChild(btn);
+  channelButtonsContainer.appendChild(btn);
 });
 
-// Highlight active channel button
 function updateGuide() {
   document.querySelectorAll('.channel-btn').forEach((btn, idx) => {
     btn.classList.toggle('active', idx === currentChannel);
   });
 }
 
-// YouTube API ready - init player
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('tvPlayer', {
     width: '100%',
@@ -50,13 +47,11 @@ function onYouTubeIframeAPIReady() {
   });
 }
 
-// Switch channel function
 function switchChannel(i) {
   if (i < 0 || i >= channels.length) return;
 
   const ch = channels[i];
 
-  // Handle special Seinfeld external channel
   if (ch.youtubePlaylistId === "SEINFELD") {
     window.open("https://watchseinfeld.net/", "_blank");
     return;
@@ -65,23 +60,19 @@ function switchChannel(i) {
   currentChannel = i;
   updateGuide();
 
-  // Hide external iframe player if visible
   nonYoutubePlayer.style.display = 'none';
   nonYoutubePlayer.src = '';
 
   if (!player) return;
 
   if (ch.youtubePlaylistId.length > 10) {
-    // playlist
     player.loadPlaylist({ list: ch.youtubePlaylistId, listType: 'playlist' });
   } else {
-    // single video
     player.loadVideoById(ch.youtubePlaylistId);
   }
   player.setVolume(volume);
 }
 
-// Remote buttons
 document.getElementById('powerBtn').onclick = () => {
   if (!player) return;
   player.stopVideo();
