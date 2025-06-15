@@ -1,4 +1,4 @@
-const channels = [
+let channels = [
   "PLnJVRTZlANm1EyaREpsWbmXRd34Y66yWV", // Golden Girls playlist ID
   "PLnJVRTZlANm28rG20hiPLXHOievQ8O3Ls", // Christmas Movies playlist ID
   "PLiquKSP6s-eFZj2HF0fhw41D5Argpn3_G", // Lifetime playlist ID
@@ -12,6 +12,7 @@ let currentChannel = 0;
 let isPoweredOn = false;
 let player;
 let playerReady = false;
+let isChangingChannel = false; // debounce flag
 
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('tvPlayer', {
@@ -25,18 +26,15 @@ function onYouTubeIframeAPIReady() {
       mute: 1
     },
     events: {
-      'onReady': onPlayerReady,
+      'onReady': () => {
+        console.log('Player ready');
+        playerReady = true;
+        if (isPoweredOn) loadChannel(currentChannel);
+      },
       'onStateChange': onPlayerStateChange,
       'onError': onPlayerError
     }
   });
-}
-
-function onPlayerReady(event) {
-  playerReady = true;
-  if (isPoweredOn) {
-    loadChannel(currentChannel);
-  }
 }
 
 function onPlayerStateChange(event) {}
@@ -46,32 +44,36 @@ function onPlayerError(event) {
 }
 
 function loadChannel(index) {
-  if (!isPoweredOn || !playerReady) return;
+  if (!isPoweredOn || !playerReady) {
+    console.log("Cannot load channel, player not ready or TV off.");
+    return;
+  }
+  if (isChangingChannel) {
+    console.log("Channel change already in progress, please wait.");
+    return;
+  }
+  if (index === currentChannel) {
+    console.log("Channel already playing.");
+    return;
+  }
+
+  isChangingChannel = true;
 
   const newIndex = index % channels.length;
   const newChannelId = channels[newIndex];
-  const currentChannelId = channels[currentChannel];
-
-  // Don't reload same channel
-  if (newIndex === currentChannel) {
-    console.log("Same channel clicked. Ignoring.");
-    return;
-  }
 
   const ytPlayerDiv = document.getElementById('tvPlayer');
   const nonYtIframe = document.getElementById('nonYoutubePlayer');
 
-  // Handle special case for Seinfeld
   if (newChannelId === "SEINFELD") {
     ytPlayerDiv.style.display = 'none';
     nonYtIframe.style.display = 'none';
     nonYtIframe.src = "";
-    if (player && playerReady) player.stopVideo();
-
+    player.stopVideo();
     setTimeout(() => {
       window.open("https://watchseinfeld.net/", '_blank');
+      isChangingChannel = false;
     }, 100);
-
     currentChannel = newIndex;
     return;
   }
@@ -80,18 +82,20 @@ function loadChannel(index) {
   nonYtIframe.style.display = 'none';
   nonYtIframe.src = "";
 
-  // Load new channel
   if (newChannelId.length === 11) {
     player.loadVideoById(newChannelId);
   } else {
     player.loadPlaylist({ list: newChannelId });
   }
-
   player.unMute();
   player.playVideo();
 
-  currentChannel = newIndex; // Only update after load
-  console.log("Switched to channel:", currentChannel);
+  currentChannel = newIndex;
+
+  // Debounce to prevent rapid channel switching
+  setTimeout(() => {
+    isChangingChannel = false;
+  }, 1500);
 }
 
 function powerToggle() {
@@ -121,12 +125,12 @@ function powerToggle() {
 }
 
 function channelUp() {
-  if (!isPoweredOn) return;
+  if (!isPoweredOn || !playerReady) return;
   loadChannel((currentChannel + 1) % channels.length);
 }
 
 function channelDown() {
-  if (!isPoweredOn) return;
+  if (!isPoweredOn || !playerReady) return;
   loadChannel((currentChannel - 1 + channels.length) % channels.length);
 }
 
@@ -154,8 +158,6 @@ function muteToggle() {
     console.log("Muted");
   }
 }
-
-window.switchChannel = loadChannel;
 
 window.addEventListener('DOMContentLoaded', () => {
   document.getElementById("powerButton").addEventListener("click", powerToggle);
