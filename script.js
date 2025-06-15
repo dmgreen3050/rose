@@ -94,4 +94,94 @@ function loadChannel(index) {
     ) {
       player.loadPlaylist({ list: channelId });
     } else if (channelId.length === 11) {
-      player.loadVideoById(chan
+      player.loadVideoById(channelId);
+    } else {
+      console.warn("Unknown channel ID format:", channelId);
+    }
+
+    player.unMute();
+    player.playVideo();
+  }, 100);
+}
+
+function powerToggle() {
+  isPoweredOn = !isPoweredOn;
+  console.log("Power:", isPoweredOn ? "ON" : "OFF");
+  const ytPlayerDiv = document.getElementById('tvPlayer');
+  const nonYtIframe = document.getElementById('nonYoutubePlayer');
+
+  if (isPoweredOn) {
+    if (playerReady) {
+      loadChannel(currentChannel >= 0 ? currentChannel : 0);
+    } else {
+      const waitForReady = setInterval(() => {
+        if (playerReady) {
+          loadChannel(currentChannel >= 0 ? currentChannel : 0);
+          clearInterval(waitForReady);
+        }
+      }, 100);
+    }
+  } else {
+    if (player && playerReady) player.stopVideo();
+    ytPlayerDiv.style.display = 'none';
+    nonYtIframe.style.display = 'none';
+    nonYtIframe.src = "";
+  }
+}
+
+function channelUp() {
+  if (!isPoweredOn) return;
+  loadChannel((currentChannel + 1) % channels.length);
+}
+
+function channelDown() {
+  if (!isPoweredOn) return;
+  loadChannel((currentChannel - 1 + channels.length) % channels.length);
+}
+
+function volumeUp() {
+  if (!isPoweredOn || !playerReady) return;
+  let vol = player.getVolume();
+  player.setVolume(Math.min(vol + 10, 100));
+  console.log("Volume:", player.getVolume());
+}
+
+function volumeDown() {
+  if (!isPoweredOn || !playerReady) return;
+  let vol = player.getVolume();
+  player.setVolume(Math.max(vol - 10, 0));
+  console.log("Volume:", player.getVolume());
+}
+
+function muteToggle() {
+  if (!isPoweredOn || !playerReady) return;
+  if (player.isMuted()) {
+    player.unMute();
+    console.log("Unmuted");
+  } else {
+    player.mute();
+    console.log("Muted");
+  }
+}
+
+function switchChannel(index) {
+  if (!isPoweredOn) return;
+  loadChannel(index);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById("powerButton").addEventListener("click", powerToggle);
+  document.getElementById("channelUp").addEventListener("click", channelUp);
+  document.getElementById("channelDown").addEventListener("click", channelDown);
+  document.getElementById("volumeUp").addEventListener("click", volumeUp);
+  document.getElementById("volumeDown").addEventListener("click", volumeDown);
+  document.getElementById("muteRemote").addEventListener("click", muteToggle);
+
+  // Also bind remote buttons
+  document.getElementById("powerRemote").addEventListener("click", powerToggle);
+  document.getElementById("channelUpRemote").addEventListener("click", channelUp);
+  document.getElementById("channelDownRemote").addEventListener("click", channelDown);
+  document.getElementById("volumeUpRemote").addEventListener("click", volumeUp);
+  document.getElementById("volumeDownRemote").addEventListener("click", volumeDown);
+  document.getElementById("muteRemote").addEventListener("click", muteToggle);
+});
