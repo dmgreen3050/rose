@@ -127,8 +127,44 @@ h1, p {
     margin: 20px auto 0;
     left: auto;
     top: auto;
+    background:transparent;
+    
+    
   }
 }
+#powerRemote{
+  color:red;
+  border:rounded;
+  background:#36454F;
+  text-shadow:2px 5px 5px;
+  
+}
+#channelUpRemote{
+  color:black;
+   border:rounded;
+  background:#36454F;
+  text-shadow:2px 5px 5px;
+}
+#channelDownRemote{
+  color:black;
+   border:rounded;
+  background:#36454F;
+  text-shadow:2px 5px 5px;
+}
+#volumeUpRemote{
+  color:black;
+   border:rounded;
+  background:#36454F;
+  text-shadow:2px 5px 5px;
+  
+}
+#muteRemote{
+  color:black;
+   border:rounded;
+  background:#36454F;
+  text-shadow:2px 5px 5px;
+}
+
 #tvWrapper.flicker {
   animation: flickerAnimation 0.2s ease;
 }
