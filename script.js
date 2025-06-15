@@ -28,15 +28,6 @@ function updateGuide() {
   });
 }
 
-function updateNowPlaying() {
-  const nowPlayingEl = document.getElementById('nowPlayingText');
-  if (channels[currentChannel]) {
-    nowPlayingEl.textContent = `NOW PLAYING: ${channels[currentChannel].name} (${channels[currentChannel].time})`;
-  } else {
-    nowPlayingEl.textContent = 'NOW PLAYING: ';
-  }
-}
-
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('tvPlayer', {
     width: '100%',
@@ -49,54 +40,12 @@ function onYouTubeIframeAPIReady() {
       iv_load_policy: 3
     },
     events: {
-      onReady: () => switchChannel(0)
+      onReady: () => switchChannel(0),
+      onStateChange: onPlayerStateChange
     }
   });
 }
 
-function switchChannel(i) {
-  const ch = channels[i];
-  if (ch.youtubePlaylistId === "SEINFELD") {
-    window.open("https://watchseinfeld.net/", "_blank");
-    return;
-  }
-
-  // If the channel is already selected, force reload
-  if (i === currentChannel && player) {
-    if (ch.youtubePlaylistId.length > 10) {
-      player.loadPlaylist({ list: ch.youtubePlaylistId, listType: 'playlist' });
-    } else {
-      player.loadVideoById(ch.youtubePlaylistId);
-    }
-    return;
-  }
-
-  currentChannel = i;
-  updateGuide();
-  updateNowPlaying();
-
-  document.getElementById('nonYoutubePlayer').style.display = 'none';
-
-  if (!player) return;
-  if (ch.youtubePlaylistId.length > 10) {
-    player.loadPlaylist({ list: ch.youtubePlaylistId, listType: 'playlist' });
-  } else {
-    player.loadVideoById(ch.youtubePlaylistId);
-  }
-}
-
-// Remote controls
-document.getElementById('powerBtn').onclick = () => player && player.stopVideo();
-document.getElementById('channelUpBtn').onclick = () => switchChannel((currentChannel + 1) % channels.length);
-document.getElementById('channelDownBtn').onclick = () => switchChannel((currentChannel - 1 + channels.length) % channels.length);
-document.getElementById('volumeUpBtn').onclick = () => { volume = Math.min(100, volume + 10); player && player.setVolume(volume); };
-document.getElementById('volumeDownBtn').onclick = () => { volume = Math.max(0, volume - 10); player && player.setVolume(volume); };
-document.getElementById('muteBtn').onclick = () => player && (player.isMuted() ? player.unMute() : player.mute());
-document.getElementById('pauseBtn').onclick = () => {
-  if (!player) return;
-  const state = player.getPlayerState();
-  if (state === YT.PlayerState.PLAYING) player.pauseVideo();
-  else player.playVideo();
-};
-document.getElementById('rewindBtn').onclick = () => player && player.seekTo(Math.max(0, player.getCurrentTime() - 10), true);
-document.getElementById('fastForwardBtn').onclick = () => player && player.seekTo(Math.min(player.getDuration(), player.getCurrentTime() + 10), true);
+function onPlayerStateChange(event) {
+  if (event.data === YT.PlayerState.PLAYING) {
+    const nowPlaying = document.querySelector('.now-playing');
