@@ -129,3 +129,12 @@ h1, p {
     top: auto;
   }
 }
+#tvWrapper.flicker {
+  animation: flickerAnimation 0.2s ease;
+}
+
+@keyframes flickerAnimation {
+  0%   { background-color: black; }
+  50%  { background-color: white; }
+  100% { background-color: black; }
+}
