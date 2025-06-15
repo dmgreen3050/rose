@@ -53,10 +53,14 @@ function onPlayerError(event) {
   console.error("YouTube Player Error:", event.data);
 }
 
+function getVideoIdFromUrl(url) {
+  const match = url.match(/(?:embed\/|v=|\/v\/|youtu\.be\/)([^&?/]+)/);
+  return match ? match[1] : null;
+}
+
 function loadChannel(index) {
   if (!isPoweredOn) return;
 
-  // Save current channel
   currentChannel = index % channels.length;
   const url = channels[currentChannel];
 
@@ -64,12 +68,10 @@ function loadChannel(index) {
   const nonYtIframe = document.getElementById('nonYoutubePlayer');
 
   if (isYouTubeURL(url)) {
-    // Show YouTube iframe, hide non-YT iframe
     ytIframe.style.display = 'block';
     nonYtIframe.style.display = 'none';
 
     if (!playerReady) {
-      // Save for loading later when ready
       pendingChannel = currentChannel;
       return;
     }
@@ -82,35 +84,29 @@ function loadChannel(index) {
     } else if (videoId) {
       player.loadVideoById(videoId);
     } else {
-      // fallback: just load URL in iframe (rare case)
       ytIframe.src = url;
     }
   } else {
-    // Non-YouTube link — hide YT iframe, show other
     ytIframe.style.display = 'none';
     nonYtIframe.style.display = 'block';
-    playerReady = false; // irrelevant here
-
+    playerReady = false;
     nonYtIframe.src = url;
   }
-}
 
-function getVideoIdFromUrl(url) {
-  const match = url.match(/(?:embed\/|v=|\/v\/|youtu\.be\/)([^&?/]+)/);
-  return match ? match[1] : null;
+  console.log("Loaded channel:", currentChannel, url);
 }
 
 function powerToggle() {
-  if (!isPoweredOn) {
-    isPoweredOn = true;
+  isPoweredOn = !isPoweredOn;
+  console.log("Power:", isPoweredOn ? "ON" : "OFF");
+
+  if (isPoweredOn) {
     loadChannel(currentChannel);
   } else {
-    isPoweredOn = false;
     if (player && playerReady) {
       player.stopVideo();
     }
     document.getElementById('tvPlayer').style.display = 'none';
-    // Do NOT set src = '' on YouTube iframe or API breaks
     const nonYtIframe = document.getElementById('nonYoutubePlayer');
     nonYtIframe.style.display = 'none';
     nonYtIframe.src = '';
@@ -121,20 +117,24 @@ function volumeUp() {
   if (!isPoweredOn || !player || !playerReady) return;
   let vol = player.getVolume();
   player.setVolume(Math.min(vol + 10, 100));
+  console.log("Volume up:", player.getVolume());
 }
 
 function volumeDown() {
   if (!isPoweredOn || !player || !playerReady) return;
   let vol = player.getVolume();
   player.setVolume(Math.max(vol - 10, 0));
+  console.log("Volume down:", player.getVolume());
 }
 
 function muteToggle() {
   if (!isPoweredOn || !player || !playerReady) return;
   if (player.isMuted()) {
     player.unMute();
+    console.log("Unmuted");
   } else {
     player.mute();
+    console.log("Muted");
   }
 }
 
