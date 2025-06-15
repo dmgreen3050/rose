@@ -1,140 +1,138 @@
-/* style.css */
-
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+/* Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 body {
-  font-family: 'Poppins', sans-serif;
-  background: #f0e9db; /* soft creamy beige */
-  color: #4a4a4a; /* dark gray */
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  background: #ffeef7;
+  color: #5b275a;
   text-align: center;
-  margin: 0;
   padding: 20px;
 }
 
 h1 {
-  font-weight: 700;
+  font-family: 'Pacifico', cursive;
   font-size: 3rem;
   margin-bottom: 0.2em;
-  color: #a04a6d; /* dusty rose */
+  color: #aa4074;
+  text-shadow: 1px 1px 2px #fff1f8;
 }
 
 p {
-  font-weight: 400;
-  font-size: 1.1rem;
-  margin-bottom: 20px;
-  color: #6f5873; /* muted purple */
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #7d4a7f;
 }
 
 .tv-wrapper {
   position: relative;
   max-width: 600px;
-  margin: 0 auto 25px;
-  aspect-ratio: 3 / 2; /* Keeps ratio consistent on all devices */
+  width: 90vw;
+  aspect-ratio: 3 / 2;
+  margin: 0 auto 20px;
   background: url('TVRETRO.png') no-repeat center center;
   background-size: contain;
-  border-radius: 16px;
-  box-shadow: 0 0 15px #c8a1bf88;
-  overflow: hidden; /* Clip anything outside */
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 0 20px #d679a6;
 }
 
-/* The video container fits *inside* the TV screen area */
+.tv-frame {
+  display: none; /* we use background instead */
+}
+
 #tvContainer {
   position: absolute;
-  top: 18.5%;    /* tweaked to fit inside the TV screen */
+  top: 18.5%;
   left: 12.5%;
   width: 75%;
   height: 63%;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
   background: black;
-  box-shadow: inset 0 0 15px #000000aa;
 }
 
-#tvPlayer, #nonYoutubePlayer {
+#tvPlayer,
+#nonYoutubePlayer {
   width: 100%;
   height: 100%;
+  border: none;
+  display: block;
 }
 
 #nonYoutubePlayer {
   display: none;
-  border: none;
 }
 
-.channel-buttons {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 25px;
-}
-
-.channel-buttons button {
-  background: #d8a7c4; /* soft lavender pink */
-  border: none;
-  border-radius: 10px;
-  padding: 10px 18px;
+.now-playing {
+  font-size: 1.1rem;
   font-weight: 600;
-  color: #3b2f44; /* dark plum */
-  cursor: pointer;
-  box-shadow: 0 3px 6px #ae81a9;
-  transition: background-color 0.3s ease;
-  user-select: none;
-}
-
-.channel-buttons button:hover {
-  background-color: #ae81a9;
-  color: #fff;
-}
-
-.channel-buttons button.active {
-  background-color: #8f628a;
-  color: #fff;
-  box-shadow: 0 0 12px #b08aae;
+  margin-bottom: 1rem;
+  color: #973b7d;
+  font-style: italic;
 }
 
 .remote-buttons {
+  margin: 15px auto;
   max-width: 600px;
-  margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   gap: 10px;
+  justify-content: center;
 }
 
 .remote-buttons button {
-  background: #6f5873;
-  border: 2px solid #a04a6d;
-  border-radius: 8px;
-  padding: 10px 16px;
+  background: #d46ca9;
+  border: none;
+  border-radius: 12px;
+  color: white;
   font-weight: 700;
-  color: #f0e9db;
+  padding: 12px 18px;
+  font-size: 1rem;
   cursor: pointer;
-  box-shadow: 0 3px 8px #9d718a;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  min-width: 80px;
-  user-select: none;
+  box-shadow: 0 4px 6px #b54e86;
+  transition: background-color 0.3s ease;
 }
 
 .remote-buttons button:hover {
-  background-color: #a04a6d;
-  color: #fff;
-  box-shadow: 0 0 20px #c48ab0;
+  background-color: #f073c3;
+}
+
+.channel-buttons {
+  margin: 20px auto;
+  max-width: 600px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+
+.channel-buttons button {
+  background: #f1c4e6;
+  border: 2px solid #973b7d;
+  border-radius: 20px;
+  padding: 12px 25px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #973b7d;
+  cursor: pointer;
+  box-shadow: 0 3px 5px #b583a4;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.channel-buttons button:hover,
+.channel-buttons button.active {
+  background-color: #973b7d;
+  color: white;
 }
 
 @media (max-width: 480px) {
-  .channel-buttons {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .remote-buttons button {
-    min-width: 60px;
-    padding: 8px 12px;
-  }
-
-  .tv-wrapper {
-    max-width: 100vw;
-    height: auto;
-    aspect-ratio: 3 / 2;
+  .remote-buttons button,
+  .channel-buttons button {
+    padding: 10px 15px;
+    font-size: 0.9rem;
   }
 }
