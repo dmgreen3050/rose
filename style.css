@@ -7,7 +7,9 @@
 
 body {
   font-family: 'Comic Sans MS', cursive, sans-serif;
-  background: #ffeef7;
+  /* rose wallpaper background */
+  background: url('roses.jpg') no-repeat center center fixed;
+  background-size: cover;
   color: #5b275a;
   text-align: center;
   padding: 20px;
@@ -41,15 +43,15 @@ p {
 }
 
 .tv-frame {
-  display: none; /* we use background instead */
+  display: none; /* using background image instead */
 }
 
 #tvContainer {
   position: absolute;
-  top: 18.5%;
-  left: 12.5%;
-  width: 75%;
-  height: 63%;
+  top: 18.5%;   /* tweak if needed */
+  left: 12.5%;  /* tweak if needed */
+  width: 75%;   /* tweak if needed */
+  height: 63%;  /* tweak if needed */
   border-radius: 12px;
   overflow: hidden;
   background: black;
