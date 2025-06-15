@@ -1,11 +1,14 @@
 const channels = [
-  "PLnJVRTZlANm1EyaREpsWbmXRd34Y66yWV", // Golden Girls playlist ID
-  "PLiquKSP6s-eFZj2HF0fhw41D5Argpn3_G", // Lifetime playlist ID
-  "SEINFELD", // Special non-YouTube handled below
-  "5fnsIjeByxQ" // Single YouTube video ID - movie clip
+  "PLnJVRTZlANm1EyaREpsWbmXRd34Y66yWV", // Golden Girls
+  "PLnJVRTZlANm28rG20hiPLXHOievQ8O3Ls", // Christmas Movies
+  "PLiquKSP6s-eFZj2HF0fhw41D5Argpn3_G", // Lifetime
+  "PL7Sv7aQs2p0V1FlyUXXbVGekKW65j5QRq", // Christmas Music
+  "PLnJVRTZlANm3L7JDiPnjIrP2zxEgbdlLJ", // Music
+  "SEINFELD",                            // Special case: open external site
+  "5fnsIjeByxQ"                         // Single YouTube video ID
 ];
 
-let currentChannel = -1;
+let currentChannel = -1; // No channel selected at start
 let isPoweredOn = false;
 let player;
 let playerReady = false;
@@ -36,7 +39,9 @@ function onPlayerReady(event) {
   }
 }
 
-function onPlayerStateChange(event) {}
+function onPlayerStateChange(event) {
+  // You can add any state change logic here if needed
+}
 
 function onPlayerError(event) {
   console.error("YouTube Player Error:", event.data);
@@ -51,7 +56,11 @@ function flickerEffect() {
 }
 
 function loadChannel(index) {
-  if (!isPoweredOn || !playerReady) return;
+  if (!isPoweredOn) return;
+  if (!playerReady) {
+    console.log("Player not ready.");
+    return;
+  }
 
   flickerEffect();
 
@@ -78,115 +87,11 @@ function loadChannel(index) {
   player.stopVideo();
 
   setTimeout(() => {
-    if (channelId.length === 11) {
-      player.loadVideoById(channelId);
-    } else {
+    if (
+      channelId.startsWith("PL") || 
+      channelId.startsWith("UU") || 
+      channelId.startsWith("OL")
+    ) {
       player.loadPlaylist({ list: channelId });
-    }
-    player.unMute();
-    player.playVideo();
-  }, 100);
-}
-
-function powerToggle() {
-  isPoweredOn = !isPoweredOn;
-  console.log("Power:", isPoweredOn ? "ON" : "OFF");
-  const ytPlayerDiv = document.getElementById('tvPlayer');
-  const nonYtIframe = document.getElementById('nonYoutubePlayer');
-
-  if (isPoweredOn) {
-    if (playerReady) {
-      loadChannel(currentChannel >= 0 ? currentChannel : 0);
-    } else {
-      const waitForReady = setInterval(() => {
-        if (playerReady) {
-          loadChannel(currentChannel >= 0 ? currentChannel : 0);
-          clearInterval(waitForReady);
-        }
-      }, 100);
-    }
-  } else {
-    if (player && playerReady) player.stopVideo();
-    ytPlayerDiv.style.display = 'none';
-    nonYtIframe.style.display = 'none';
-    nonYtIframe.src = "";
-  }
-}
-
-function channelUp() {
-  if (!isPoweredOn) return;
-  loadChannel((currentChannel + 1) % channels.length);
-}
-
-function channelDown() {
-  if (!isPoweredOn) return;
-  loadChannel((currentChannel - 1 + channels.length) % channels.length);
-}
-
-function volumeUp() {
-  if (!isPoweredOn || !playerReady) return;
-  let vol = player.getVolume();
-  player.setVolume(Math.min(vol + 10, 100));
-  console.log("Volume:", player.getVolume());
-}
-
-function volumeDown() {
-  if (!isPoweredOn || !playerReady) return;
-  let vol = player.getVolume();
-  player.setVolume(Math.max(vol - 10, 0));
-  console.log("Volume:", player.getVolume());
-}
-
-function muteToggle() {
-  if (!isPoweredOn || !playerReady) return;
-  if (player.isMuted()) {
-    player.unMute();
-    console.log("Unmuted");
-  } else {
-    player.mute();
-    console.log("Muted");
-  }
-}
-
-// The helper function for touch + click event handling
-function addFastClickListener(element, handler) {
-  let touched = false;
-
-  element.addEventListener("touchstart", (e) => {
-    touched = true;
-    handler();
-    e.preventDefault();
-  });
-
-  element.addEventListener("click", (e) => {
-    if (touched) {
-      touched = false;
-      return;
-    }
-    handler();
-  });
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-  addFastClickListener(document.getElementById("powerButton"), powerToggle);
-  addFastClickListener(document.getElementById("channelUp"), channelUp);
-  addFastClickListener(document.getElementById("channelDown"), channelDown);
-  addFastClickListener(document.getElementById("volumeUp"), volumeUp);
-  addFastClickListener(document.getElementById("volumeDown"), volumeDown);
-
-  addFastClickListener(document.getElementById("powerRemote"), powerToggle);
-  addFastClickListener(document.getElementById("channelUpRemote"), channelUp);
-  addFastClickListener(document.getElementById("channelDownRemote"), channelDown);
-  addFastClickListener(document.getElementById("volumeUpRemote"), volumeUp);
-  addFastClickListener(document.getElementById("volumeDownRemote"), volumeDown);
-  addFastClickListener(document.getElementById("muteRemote"), muteToggle);
-});
-
-// Optional global switchChannel function for your channel buttons (if needed)
-function switchChannel(index) {
-  if (!isPoweredOn) {
-    isPoweredOn = true;
-    powerToggle();
-  }
-  loadChannel(index);
-}
+    } else if (channelId.length === 11) {
+      player.loadVideoById(chan
