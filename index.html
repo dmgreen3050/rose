@@ -3,41 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Rosemary's TV</title>
+  <title>Rosemary's TV - Clean Classic</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
   <h1>Rosemary's TV</h1>
-  <p>Watch some of her favorites</p>
 
-<div class="tv-wrapper">
-  <!-- background image is your TV frame -->
-  <div id="tvContainer">
-    <div id="tvPlayer"></div>
-    <iframe
-      id="nonYoutubePlayer"
-      frameborder="0"
-      allowfullscreen
-      src=""
-      style="display:none;"
-    ></iframe>
+  <div class="tv-wrapper">
+    <div id="tvContainer">
+      <div id="tvPlayer"></div>
+      <iframe
+        id="nonYoutubePlayer"
+        allowfullscreen
+        src=""
+      ></iframe>
+    </div>
   </div>
-</div>
 
-  <div class="remote-buttons">
+  <div class="buttons" id="remoteButtons">
     <button id="powerBtn">POWER</button>
     <button id="channelUpBtn">CH ▲</button>
     <button id="channelDownBtn">CH ▼</button>
-    <button id="volumeUpBtn">VOL ▲</button>
-    <button id="volumeDownBtn">VOL ▼</button>
-    <button id="muteBtn">MUTE</button>
-    <button id="pauseBtn">PAUSE</button>
-    <button id="rewindBtn"><<</button>
-    <button id="fastForwardBtn">>></button>
   </div>
 
-  <div class="channel-buttons">
-    <!-- Channel buttons will be created here by JS -->
+  <div class="buttons" id="channelButtons">
+    <!-- Channel buttons injected by JS -->
   </div>
 
   <script src="https://www.youtube.com/iframe_api"></script>
