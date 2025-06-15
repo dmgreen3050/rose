@@ -9,7 +9,7 @@ const channels = [
   { number: "03", name: "Lifetime", youtubePlaylistId: "PL7Sv7aQs2p0V1FlyUXXbVGekKW65j5QRq" },
   { number: "04", name: "Christmas Music", youtubePlaylistId: "PLiquKSP6s-eFZj2HF0fhw41D5Argpn3_G" },
   { number: "05", name: "Music", youtubePlaylistId: "PLnJVRTZlANm3L7JDiPnjIrP2zxEgbdlLJ" },
-  { number: "06", name: "Seinfeld", youtubePlaylistId: "SEINFELD" },
+  { number: "06", name: "Seinfeld", youtubePlaylistId: "SEINFELD" }, // Just a label
   { number: "07", name: "Movies", youtubePlaylistId: "5fnsIjeByxQ" }
 ];
 
@@ -26,7 +26,6 @@ let currentChannelIndex = 0;
 let isPowerOn = false;
 let currentVolume = 50;
 
-// Create channel buttons dynamically
 channels.forEach(channel => {
   const btn = document.createElement('button');
   btn.textContent = `${channel.number} - ${channel.name}`;
@@ -73,9 +72,7 @@ function onPlayerReady(event) {
   updateMuteButton();
 }
 
-function onPlayerStateChange(event) {
-  // Optional: handle autoplay next etc.
-}
+function onPlayerStateChange(event) {}
 
 function loadChannel(index) {
   if (!player) return;
@@ -89,9 +86,11 @@ function loadChannel(index) {
 
   const channel = channels[index];
 
-  // Special case: Open Seinfeld in a new tab
+  // ✅ If Seinfeld channel is selected
   if (channel.name.toLowerCase() === 'seinfeld') {
-    window.open('https://seinfeldwatch.net', '_blank');
+    if (isPowerOn) {
+      window.open('https://watchseinfeld.net', '_blank');
+    }
     return;
   }
 
