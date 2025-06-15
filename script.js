@@ -18,11 +18,11 @@ function onYouTubeIframeAPIReady() {
     height: '360',
     width: '640',
     playerVars: {
-      autoplay: 0,       // Start paused; we will trigger play after power on
+      autoplay: 0,
       controls: 0,
       modestbranding: 1,
       rel: 0,
-      mute: 1           // Start muted for autoplay to work on Safari/Chrome
+      mute: 1
     },
     events: {
       'onReady': onPlayerReady,
@@ -39,9 +39,7 @@ function onPlayerReady(event) {
   }
 }
 
-function onPlayerStateChange(event) {
-  // Could be used for UI updates if needed
-}
+function onPlayerStateChange(event) {}
 
 function onPlayerError(event) {
   console.error("YouTube Player Error:", event.data);
@@ -56,13 +54,14 @@ function loadChannel(index) {
   const nonYtIframe = document.getElementById('nonYoutubePlayer');
 
   if (channels[currentChannel] === "SEINFELD") {
-    // Show non-YouTube iframe for Seinfeld link (opens full screen)
     ytPlayerDiv.style.display = 'none';
-    nonYtIframe.style.display = 'block';
-    nonYtIframe.src = "https://watchseinfeld.net/";
+    nonYtIframe.style.display = 'none';
+    nonYtIframe.src = "";
     if (player && playerReady) player.stopVideo();
+
+    // Open Seinfeld in new tab like Firefox
+    window.open("https://watchseinfeld.net/", '_blank');
   } else {
-    // Show YouTube player
     nonYtIframe.style.display = 'none';
     nonYtIframe.src = "";
     ytPlayerDiv.style.display = 'block';
@@ -74,15 +73,13 @@ function loadChannel(index) {
 
     const channelId = channels[currentChannel];
     if (channelId.length === 11) {
-      // Single video ID
       player.loadVideoById(channelId);
     } else {
-      // Playlist ID
       player.loadPlaylist({ list: channelId });
     }
 
     player.playVideo();
-    player.unMute(); // Unmute after user interaction (power on)
+    player.unMute();
   }
 
   console.log("Loaded channel:", currentChannel);
@@ -100,7 +97,6 @@ function powerToggle() {
       loadChannel(currentChannel);
     }
   } else {
-    // Power off — stop video, hide both players
     if (player && playerReady) player.stopVideo();
     ytPlayerDiv.style.display = 'none';
     nonYtIframe.style.display = 'none';
