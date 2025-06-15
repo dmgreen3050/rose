@@ -15,12 +15,13 @@ let volume = 50;
 const channelButtonsContainer = document.getElementById('channelButtons');
 const nonYoutubePlayer = document.getElementById('nonYoutubePlayer');
 
+// Create channel buttons only once
 channels.forEach((ch, i) => {
   const btn = document.createElement('button');
   btn.className = 'channel-btn';
   btn.textContent = ch.name;
   btn.title = `Channel ${ch.number}`;
-  btn.onclick = () => switchChannel(i);
+  btn.addEventListener('click', () => switchChannel(i));
   channelButtonsContainer.appendChild(btn);
 });
 
@@ -30,6 +31,7 @@ function updateGuide() {
   });
 }
 
+// YouTube API ready callback
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('tvPlayer', {
     width: '100%',
@@ -50,6 +52,9 @@ function onYouTubeIframeAPIReady() {
 function switchChannel(i) {
   if (i < 0 || i >= channels.length) return;
 
+  // Avoid rapid clicks messing things up:
+  if (i === currentChannel) return; // no change
+
   const ch = channels[i];
 
   if (ch.youtubePlaylistId === "SEINFELD") {
@@ -60,6 +65,7 @@ function switchChannel(i) {
   currentChannel = i;
   updateGuide();
 
+  // Hide iframe if visible, reset its src
   nonYoutubePlayer.style.display = 'none';
   nonYoutubePlayer.src = '';
 
@@ -73,6 +79,7 @@ function switchChannel(i) {
   player.setVolume(volume);
 }
 
+// Remote button handlers
 document.getElementById('powerBtn').onclick = () => {
   if (!player) return;
   player.stopVideo();
