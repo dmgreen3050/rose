@@ -15,9 +15,10 @@ const tvGuide = document.getElementById('tvGuide');
 channels.forEach((ch, i) => {
   const div = document.createElement('div');
   div.className = 'channel-item';
-  div.innerHTML = `<div class="channel-number">${ch.number}</div>
-                   <div class="channel-time">${ch.time}</div>
-                   <div class="channel-name">${ch.name}</div>`;
+  div.innerHTML = `
+    <div class="channel-number">${ch.number}</div>
+    <div class="channel-time">${ch.time}</div>
+    <div class="channel-name">${ch.name}</div>`;
   div.onclick = () => switchChannel(i);
   tvGuide.appendChild(div);
 });
@@ -30,13 +31,23 @@ function updateGuide() {
 
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('tvPlayer', {
-    width: '100%', height: '100%',
-    playerVars: { autoplay: 1, controls:0, rel:0, modestbranding:1, iv_load_policy:3 },
-    events: { onReady: () => switchChannel(0) }
+    width: '100%',
+    height: '100%',
+    playerVars: { autoplay: 1, controls: 0, rel: 0, modestbranding: 1, iv_load_policy: 3 },
+    events: {
+      onReady: () => {
+        setTimeout(() => switchChannel(0), 300); // delay to stabilize API loading
+      }
+    }
   });
 }
 
 function switchChannel(i) {
+  if (!player || !player.loadVideoById) return;
+
+  // If the same channel is selected and playing, do nothing
+  if (i === currentChannel && player.getPlayerState() === YT.PlayerState.PLAYING) return;
+
   currentChannel = i;
   updateGuide();
   const ch = channels[i];
@@ -47,20 +58,26 @@ function switchChannel(i) {
     return;
   }
 
-  if (!player) return;
-  if (ch.youtubePlaylistId.length > 10)
-    player.loadPlaylist({ list: ch.youtubePlaylistId, listType: 'playlist' });
-  else
+  if (ch.youtubePlaylistId.length > 10) {
+    player.loadPlaylist({ list: ch.youtubePlaylistId, listType: 'playlist', index: 0 });
+  } else {
     player.loadVideoById(ch.youtubePlaylistId);
+  }
 }
 
 // Remote controls
 document.getElementById('powerBtn').onclick = () => player && player.stopVideo();
-document.getElementById('channelUpBtn').onclick = () => switchChannel((currentChannel+1)%channels.length);
-document.getElementById('channelDownBtn').onclick = () => switchChannel((currentChannel-1+channels.length)%channels.length);
-document.getElementById('volumeUpBtn').onclick = () => { volume = Math.min(100, volume+10); player && player.setVolume(volume); };
-document.getElementById('volumeDownBtn').onclick = () => { volume = Math.max(0, volume-10); player && player.setVolume(volume); };
-document.getElementById('muteBtn').onclick = () => player && (player.isMuted()?player.unMute():player.mute());
-document.getElementById('pauseBtn').onclick = () => player && (player.getPlayerState()===YT.PlayerState.PLAYING?player.pauseVideo():player.playVideo());
-document.getElementById('rewindBtn').onclick = () => player && player.seekTo(Math.max(0, player.getCurrentTime()-10), true);
-document.getElementById('fastForwardBtn').onclick = () => player && player.seekTo(Math.min(player.getDuration(), player.getCurrentTime()+10), true);
+document.getElementById('channelUpBtn').onclick = () => switchChannel((currentChannel + 1) % channels.length);
+document.getElementById('channelDownBtn').onclick = () => switchChannel((currentChannel - 1 + channels.length) % channels.length);
+document.getElementById('volumeUpBtn').onclick = () => {
+  volume = Math.min(100, volume + 10);
+  player && player.setVolume(volume);
+};
+document.getElementById('volumeDownBtn').onclick = () => {
+  volume = Math.max(0, volume - 10);
+  player && player.setVolume(volume);
+};
+document.getElementById('muteBtn').onclick = () => player && (player.isMuted() ? player.unMute() : player.mute());
+document.getElementById('pauseBtn').onclick = () => player && (player.getPlayerState() === YT.PlayerState.PLAYING ? player.pauseVideo() : player.playVideo());
+document.getElementById('rewindBtn').onclick = () => player && player.seekTo(Math.max(0, player.getCurrentTime() - 10), true);
+document.getElementById('fastForwardBtn').onclick = () => player && player.seekTo(Math.min(player.getDuration(), player.getCurrentTime() + 10), true);
