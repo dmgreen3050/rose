@@ -1,123 +1,131 @@
 const channels = [
-  {name: 'Lifetime', type: 'youtube', playlistId: 'PLkRkQjmz8eJ6nH4Qpi_2XNkRfRv9n9PAQ'},
-  {name: 'Golden Girls', type: 'youtube', playlistId: 'PLkRkQjmz8eJ7lxPIFzA3p2zq2kNw4oqJu'},
-  {name: 'Music Channel', type: 'youtube', playlistId: 'PLkRkQjmz8eJ5OP0T0Tq6zQy5e4qzjLqAb'},
-  {name: 'External Link', type: 'external', url: 'https://example.com'},
-  // Add more channels here
+  { number: "01", name: "Golden Girls", youtubePlaylistId: "PLnJVRTZlANm1EyaREpsWbmXRd34Y66yWV" },
+  { number: "02", name: "Christmas Movies", youtubePlaylistId: "PLnJVRTZlANm28rG20hiPLXHOievQ8O3Ls" },
+  { number: "03", name: "Lifetime", youtubePlaylistId: "PL7Sv7aQs2p0V1FlyUXXbVGekKW65j5QRq" },
+  { number: "04", name: "Christmas Music", youtubePlaylistId: "PLiquKSP6s-eFZj2HF0fhw41D5Argpn3_G" },
+  { number: "05", name: "Music", youtubePlaylistId: "PLnJVRTZlANm3L7JDiPnjIrP2zxEgbdlLJ" },
+  { number: "06", name: "Seinfeld", youtubePlaylistId: "SEINFELD" },
+  { number: "07", name: "Movies", youtubePlaylistId: "5fnsIjeByxQ" }
 ];
 
-let currentChannelIndex = 0;
-let isPoweredOn = false;
 let player;
-const tvPlayerDiv = document.getElementById('tvPlayer');
-const nonYoutubePlayer = document.getElementById('nonYoutubePlayer');
+let currentChannel = -1;
+let volume = 50;
 
-// YouTube API callback when ready
-function onYouTubeIframeAPIReady() {
-  player = new YT.Player('tvPlayer', {
-    height: '100%',
-    width: '100%',
-    playerVars: {
-      listType: 'playlist',
-      list: channels[currentChannelIndex].playlistId,
-      autoplay: 0,
-      controls: 0,
-      disablekb: 1,
-      modestbranding: 1,
-      rel: 0,
-      iv_load_policy: 3,
-    },
-    events: {
-      'onReady': onPlayerReady,
-      'onStateChange': onPlayerStateChange,
-    }
-  });
-}
+const channelButtonsContainer = document.querySelector('.channel-buttons');
 
-function onPlayerReady(event) {
-  if (isPoweredOn && channels[currentChannelIndex].type === 'youtube') {
-    event.target.playVideo();
-  }
-}
-
-function onPlayerStateChange(event) {
-  if (event.data === YT.PlayerState.PLAYING) {
-    tvPlayerDiv.style.display = 'block';
-  } else if (event.data === YT.PlayerState.BUFFERING) {
-    tvPlayerDiv.style.display = 'none';
-  }
-}
-
-function switchToChannel(index) {
-  currentChannelIndex = index;
-  updateActiveButton();
-  const channel = channels[index];
-
-  if (!isPoweredOn) {
-    return; // don't do anything if power is off
-  }
-
-  if (channel.type === 'youtube') {
-    nonYoutubePlayer.style.display = 'none';
-    tvPlayerDiv.style.display = 'block';
-    if(player && player.loadPlaylist) {
-      player.loadPlaylist({list: channel.playlistId, listType: 'playlist'});
-    }
-  } else if (channel.type === 'external') {
-    if(player && player.pauseVideo) player.pauseVideo();
-    tvPlayerDiv.style.display = 'none';
-    nonYoutubePlayer.style.display = 'block';
-    nonYoutubePlayer.src = channel.url;
-  }
-}
-
-function updateActiveButton() {
-  const btns = document.querySelectorAll('#channelButtons button');
-  btns.forEach((btn, i) => {
-    btn.classList.toggle('active', i === currentChannelIndex);
-  });
-}
-
-function buildChannelButtons() {
-  const container = document.getElementById('channelButtons');
+function createChannelButtons() {
   channels.forEach((ch, i) => {
     const btn = document.createElement('button');
     btn.textContent = ch.name;
-    btn.addEventListener('click', () => {
-      if (!isPoweredOn) return;
-      switchToChannel(i);
-    });
-    container.appendChild(btn);
+    btn.onclick = () => switchChannel(i);
+    channelButtonsContainer.appendChild(btn);
   });
 }
 
-// Power toggle button
-document.getElementById('powerBtn').addEventListener('click', () => {
-  isPoweredOn = !isPoweredOn;
-  if (isPoweredOn) {
-    switchToChannel(currentChannelIndex);
-    document.getElementById('powerBtn').textContent = 'POWER ON';
-  } else {
-    document.getElementById('powerBtn').textContent = 'POWER OFF';
-    if(player && player.pauseVideo) player.pauseVideo();
-    tvPlayerDiv.style.display = 'none';
-    nonYoutubePlayer.style.display = 'none';
-    nonYoutubePlayer.src = '';
+function updateChannelButtons() {
+  const buttons = channelButtonsContainer.querySelectorAll('button');
+  buttons.forEach((btn, i) => {
+    btn.classList.toggle('active', i === currentChannel);
+  });
+}
+
+// YouTube API ready callback
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player('tvPlayer', {
+    width: '100%',
+    height: '100%',
+    playerVars: {
+      autoplay: 1,
+      controls: 0,
+      rel: 0,
+      modestbranding: 1,
+      iv_load_policy: 3,
+      disablekb: 1
+    },
+    events: {
+      onReady: () => {
+        createChannelButtons();
+        switchChannel(0);
+      }
+    }
+  });
+}
+
+function switchChannel(i) {
+  if (i === currentChannel) return;
+  const ch = channels[i];
+
+  // Special case: external link for Seinfeld
+  if (ch.youtubePlaylistId === "SEINFELD") {
+    window.open("https://watchseinfeld.net/", "_blank");
+    return;
   }
-});
 
-// Channel up/down buttons
-document.getElementById('channelUpBtn').addEventListener('click', () => {
-  if (!isPoweredOn) return;
-  currentChannelIndex = (currentChannelIndex + 1) % channels.length;
-  switchToChannel(currentChannelIndex);
-});
+  currentChannel = i;
+  updateChannelButtons();
 
-document.getElementById('channelDownBtn').addEventListener('click', () => {
-  if (!isPoweredOn) return;
-  currentChannelIndex = (currentChannelIndex - 1 + channels.length) % channels.length;
-  switchToChannel(currentChannelIndex);
-});
+  // Hide external iframe if visible
+  const iframe = document.getElementById('nonYoutubePlayer');
+  iframe.style.display = 'none';
 
-// On page load
-buildChannelButtons();
+  if (!player) return;
+
+  if (ch.youtubePlaylistId.length > 10) {
+    player.loadPlaylist({ list: ch.youtubePlaylistId, listType: 'playlist' });
+  } else {
+    player.loadVideoById(ch.youtubePlaylistId);
+  }
+  player.setVolume(volume);
+}
+
+// Remote buttons functionality
+document.getElementById('powerBtn').onclick = () => {
+  if (!player) return;
+  player.stopVideo();
+  currentChannel = -1;
+  updateChannelButtons();
+};
+
+document.getElementById('channelUpBtn').onclick = () => {
+  if (currentChannel === -1) return;
+  switchChannel((currentChannel + 1) % channels.length);
+};
+
+document.getElementById('channelDownBtn').onclick = () => {
+  if (currentChannel === -1) return;
+  switchChannel((currentChannel - 1 + channels.length) % channels.length);
+};
+
+document.getElementById('volumeUpBtn').onclick = () => {
+  volume = Math.min(100, volume + 10);
+  if (player) player.setVolume(volume);
+};
+
+document.getElementById('volumeDownBtn').onclick = () => {
+  volume = Math.max(0, volume - 10);
+  if (player) player.setVolume(volume);
+};
+
+document.getElementById('muteBtn').onclick = () => {
+  if (!player) return;
+  if (player.isMuted()) player.unMute();
+  else player.mute();
+};
+
+document.getElementById('pauseBtn').onclick = () => {
+  if (!player) return;
+  const state = player.getPlayerState();
+  if (state === YT.PlayerState.PLAYING) player.pauseVideo();
+  else player.playVideo();
+};
+
+document.getElementById('rewindBtn').onclick = () => {
+  if (!player) return;
+  player.seekTo(Math.max(0, player.getCurrentTime() - 10), true);
+};
+
+document.getElementById('fastForwardBtn').onclick = () => {
+  if (!player) return;
+  player.seekTo(Math.min(player.getDuration(), player.getCurrentTime() + 10), true);
+};
