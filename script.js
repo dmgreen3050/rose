@@ -10,7 +10,7 @@ const channels = [
   { number: "04", name: "Lifetime", youtubePlaylistId: "PLiquKSP6s-eFZj2HF0fhw41D5Argpn3_G" },
   { number: "05", name: "Music", youtubePlaylistId: "PLnJVRTZlANm3L7JDiPnjIrP2zxEgbdlLJ" },
   { number: "06", name: "Seinfeld", youtubePlaylistId: "SEINFELD" }, // Just a label
-  { number: "07", name: "Movies", youtubePlaylistId: "5fnsIjeByxQ" }
+  { number: "07", name: "Movies", youtubePlaylistId: "PLnJVRTZlANm0s79QFtuPHbkWDYSZ8sagB" }
 ];
 
 const channelButtonsContainer = document.querySelector('.channel-buttons');
