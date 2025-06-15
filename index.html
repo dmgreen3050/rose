@@ -4,35 +4,34 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Rosemary's TV</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
   <h1>Rosemary's TV</h1>
   <p>Watch some of her favorites</p>
 
-  <div class="tv-container">
-    <div class="tv-and-guide">
-      <div class="screen">
-        <div id="tvPlayer"></div>
-        <iframe id="nonYoutubePlayer" style="display:none;" frameborder="0" allowfullscreen></iframe>
+  <div class="app-container">
+    <div class="tv-wrapper" id="tvWrapper">
+      <div class="screen" id="tvContainer">
+        <div id="tvPlayerWrapper">
+          <div id="tvPlayer"></div>
+        </div>
       </div>
-
-      <div class="tv-guide" id="tvGuide">
-        <!-- Channels will be populated here -->
-      </div>
+      <img src="TVRETRO.png" alt="retro tv" class="tv-frame" />
     </div>
 
-    <div class="remote" id="remoteControls">
+    <div id="tvGuide" class="tv-guide"></div>
+
+    <div class="remote-buttons">
       <button id="powerBtn">POWER</button>
       <button id="channelUpBtn">CH ▲</button>
       <button id="channelDownBtn">CH ▼</button>
       <button id="volumeUpBtn">VOL ▲</button>
       <button id="volumeDownBtn">VOL ▼</button>
       <button id="muteBtn">MUTE</button>
-      <button id="pauseBtn">PAUSE</button>
-      <button id="rewindBtn">⏪ REWIND</button>
-      <button id="fastForwardBtn">⏩ FF</button>
+      <button id="pauseBtn">PAUSE/PLAY</button>
+      <button id="rewindBtn"><< REWIND</button>
+      <button id="fastForwardBtn">FAST >> </button>
     </div>
   </div>
 
