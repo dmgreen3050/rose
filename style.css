@@ -133,11 +133,23 @@ p {
 
 /* Responsive for phones and smaller screens */
 @media (max-width: 600px) {
+  .tv-wrapper {
+    padding: 0 10px; /* added padding to contain .screen */
+  }
   .screen {
+    position: absolute;
     top: 5%;
-    left: 5%;
-    width: 90%;
-    height: 50vw; /* keeps aspect ratio roughly */
+    left: 0;
+    width: 100%;
+    height: 50vw; /* maintains aspect ratio */
+    overflow: hidden;
+    background: black;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-sizing: border-box; /* prevent overflow from padding */
   }
 
   #powerButton,
@@ -145,7 +157,6 @@ p {
   #channelDown,
   #volumeUp,
   #volumeDown {
-    /* Optionally scale buttons for mobile */
     width: 30px;
     height: 10px;
     top: 90%;
@@ -160,3 +171,4 @@ p {
     top: auto;
   }
 }
+
