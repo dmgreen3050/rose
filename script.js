@@ -46,47 +46,52 @@ function onPlayerError(event) {
 }
 
 function loadChannel(index) {
-  if (!isPoweredOn) return;
+  if (!isPoweredOn || !playerReady) return;
 
-  currentChannel = index % channels.length;
+  const newIndex = index % channels.length;
+  const newChannelId = channels[newIndex];
+  const currentChannelId = channels[currentChannel];
+
+  // Don't reload same channel
+  if (newIndex === currentChannel) {
+    console.log("Same channel clicked. Ignoring.");
+    return;
+  }
 
   const ytPlayerDiv = document.getElementById('tvPlayer');
   const nonYtIframe = document.getElementById('nonYoutubePlayer');
 
-  if (channels[currentChannel] === "SEINFELD") {
+  // Handle special case for Seinfeld
+  if (newChannelId === "SEINFELD") {
     ytPlayerDiv.style.display = 'none';
     nonYtIframe.style.display = 'none';
     nonYtIframe.src = "";
     if (player && playerReady) player.stopVideo();
 
-    // Open Seinfeld in new tab like Firefox (Safari requires direct interaction)
     setTimeout(() => {
       window.open("https://watchseinfeld.net/", '_blank');
     }, 100);
-  } else {
-    nonYtIframe.style.display = 'none';
-    nonYtIframe.src = "";
-    ytPlayerDiv.style.display = 'block';
 
-    if (!playerReady) {
-      console.log("Player not ready yet.");
-      return;
-    }
-
-    const channelId = channels[currentChannel];
-    if (channelId.length === 11) {
-      player.loadVideoById(channelId);
-    } else {
-      player.loadPlaylist({ list: channelId });
-    }
-
-    if (typeof player.playVideo === 'function') {
-      player.playVideo();
-    }
-    player.unMute();
+    currentChannel = newIndex;
+    return;
   }
 
-  console.log("Loaded channel:", currentChannel);
+  ytPlayerDiv.style.display = 'block';
+  nonYtIframe.style.display = 'none';
+  nonYtIframe.src = "";
+
+  // Load new channel
+  if (newChannelId.length === 11) {
+    player.loadVideoById(newChannelId);
+  } else {
+    player.loadPlaylist({ list: newChannelId });
+  }
+
+  player.unMute();
+  player.playVideo();
+
+  currentChannel = newIndex; // Only update after load
+  console.log("Switched to channel:", currentChannel);
 }
 
 function powerToggle() {
@@ -100,7 +105,6 @@ function powerToggle() {
     if (playerReady) {
       loadChannel(currentChannel);
     } else {
-      // Wait for player to be ready before loading channel
       const waitForReady = setInterval(() => {
         if (playerReady) {
           loadChannel(currentChannel);
