@@ -1,33 +1,38 @@
 const channels = [
-  { number: "01", name: "Golden Girls", time: "8:00 PM", youtubePlaylistId: "PLnJVRTZlANm1EyaREpsWbmXRd34Y66yWV" },
-  { number: "02", name: "Christmas Movies", time: "9:00 PM", youtubePlaylistId: "PLnJVRTZlANm28rG20hiPLXHOievQ8O3Ls" },
-  { number: "03", name: "Lifetime", time: "10:00 PM", youtubePlaylistId: "PL7Sv7aQs2p0V1FlyUXXbVGekKW65j5QRq" },
-  { number: "04", name: "Christmas Music", time: "11:00 PM", youtubePlaylistId: "PLiquKSP6s-eFZj2HF0fhw41D5Argpn3_G" },
-  { number: "05", name: "Music", time: "12:00 AM", youtubePlaylistId: "PLnJVRTZlANm3L7JDiPnjIrP2zxEgbdlLJ" },
-  { number: "06", name: "Seinfeld", time: "1:00 AM", youtubePlaylistId: "SEINFELD" },
-  { number: "07", name: "Movies", time: "2:00 AM", youtubePlaylistId: "5fnsIjeByxQ" }
+  { number: "01", name: "Golden Girls", youtubePlaylistId: "PLnJVRTZlANm1EyaREpsWbmXRd34Y66yWV" },
+  { number: "02", name: "Christmas Movies", youtubePlaylistId: "PLnJVRTZlANm28rG20hiPLXHOievQ8O3Ls" },
+  { number: "03", name: "Lifetime", youtubePlaylistId: "PL7Sv7aQs2p0V1FlyUXXbVGekKW65j5QRq" },
+  { number: "04", name: "Christmas Music", youtubePlaylistId: "PLiquKSP6s-eFZj2HF0fhw41D5Argpn3_G" },
+  { number: "05", name: "Music", youtubePlaylistId: "PLnJVRTZlANm3L7JDiPnjIrP2zxEgbdlLJ" },
+  { number: "06", name: "Seinfeld", youtubePlaylistId: "SEINFELD" },
+  { number: "07", name: "Movies", youtubePlaylistId: "5fnsIjeByxQ" }
 ];
 
-let player, currentChannel = -1, volume = 50;
+let player;
+let currentChannel = -1;
+let volume = 50;
 
 const tvGuide = document.getElementById('tvGuide');
+const nonYoutubePlayer = document.getElementById('nonYoutubePlayer');
 
+// Build channel buttons (like Roku quick buttons)
 channels.forEach((ch, i) => {
-  const div = document.createElement('div');
-  div.className = 'channel-item';
-  div.innerHTML = `<div class="channel-number">${ch.number}</div>
-                   <div class="channel-time">${ch.time}</div>
-                   <div class="channel-name">${ch.name}</div>`;
-  div.onclick = () => switchChannel(i);
-  tvGuide.appendChild(div);
+  const btn = document.createElement('button');
+  btn.className = 'channel-btn';
+  btn.textContent = ch.name;
+  btn.title = `Channel ${ch.number}`;
+  btn.onclick = () => switchChannel(i);
+  tvGuide.appendChild(btn);
 });
 
+// Highlight active channel button
 function updateGuide() {
-  document.querySelectorAll('.channel-item').forEach((el, idx) => {
-    el.classList.toggle('active', idx === currentChannel);
+  document.querySelectorAll('.channel-btn').forEach((btn, idx) => {
+    btn.classList.toggle('active', idx === currentChannel);
   });
 }
 
+// YouTube API ready - init player
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('tvPlayer', {
     width: '100%',
@@ -41,11 +46,91 @@ function onYouTubeIframeAPIReady() {
     },
     events: {
       onReady: () => switchChannel(0),
-      onStateChange: onPlayerStateChange
     }
   });
 }
 
-function onPlayerStateChange(event) {
-  if (event.data === YT.PlayerState.PLAYING) {
-    const nowPlaying = document.querySelector('.now-playing');
+// Switch channel function
+function switchChannel(i) {
+  if (i < 0 || i >= channels.length) return;
+
+  const ch = channels[i];
+
+  // Handle special Seinfeld external channel
+  if (ch.youtubePlaylistId === "SEINFELD") {
+    window.open("https://watchseinfeld.net/", "_blank");
+    return;
+  }
+
+  currentChannel = i;
+  updateGuide();
+
+  // Hide external iframe player if visible
+  nonYoutubePlayer.style.display = 'none';
+  nonYoutubePlayer.src = '';
+
+  if (!player) return;
+
+  if (ch.youtubePlaylistId.length > 10) {
+    // playlist
+    player.loadPlaylist({ list: ch.youtubePlaylistId, listType: 'playlist' });
+  } else {
+    // single video
+    player.loadVideoById(ch.youtubePlaylistId);
+  }
+  player.setVolume(volume);
+}
+
+// Remote buttons
+document.getElementById('powerBtn').onclick = () => {
+  if (!player) return;
+  player.stopVideo();
+  currentChannel = -1;
+  updateGuide();
+};
+
+document.getElementById('channelUpBtn').onclick = () => {
+  if (currentChannel === -1) switchChannel(0);
+  else switchChannel((currentChannel + 1) % channels.length);
+};
+
+document.getElementById('channelDownBtn').onclick = () => {
+  if (currentChannel === -1) switchChannel(0);
+  else switchChannel((currentChannel - 1 + channels.length) % channels.length);
+};
+
+document.getElementById('volumeUpBtn').onclick = () => {
+  volume = Math.min(100, volume + 10);
+  if (player) player.setVolume(volume);
+};
+
+document.getElementById('volumeDownBtn').onclick = () => {
+  volume = Math.max(0, volume - 10);
+  if (player) player.setVolume(volume);
+};
+
+document.getElementById('muteBtn').onclick = () => {
+  if (!player) return;
+  if (player.isMuted()) player.unMute();
+  else player.mute();
+};
+
+document.getElementById('pauseBtn').onclick = () => {
+  if (!player) return;
+  const state = player.getPlayerState();
+  if (state === YT.PlayerState.PLAYING) player.pauseVideo();
+  else player.playVideo();
+};
+
+document.getElementById('rewindBtn').onclick = () => {
+  if (!player) return;
+  const time = player.getCurrentTime();
+  player.seekTo(Math.max(0, time - 10), true);
+};
+
+document.getElementById('fastForwardBtn').onclick = () => {
+  if (!player) return;
+  const time = player.getCurrentTime();
+  const duration = player.getDuration();
+  player.seekTo(Math.min(duration, time + 10), true);
+};
