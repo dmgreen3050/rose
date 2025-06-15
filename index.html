@@ -13,19 +13,17 @@
   <div class="tv-wrapper">
     <img src="TVRETRO.png" alt="retro tv" class="tv-frame" />
     <div id="tvContainer">
-      <div id="tvPlayerWrapper">
-        <div id="tvPlayer"></div>
-        <iframe
-          id="nonYoutubePlayer"
-          frameborder="0"
-          allowfullscreen
-          src=""
-        ></iframe>
-      </div>
+      <div id="tvPlayer"></div>
+      <iframe
+        id="nonYoutubePlayer"
+        frameborder="0"
+        allowfullscreen
+        src=""
+      ></iframe>
     </div>
   </div>
 
-  <div id="channelButtons" class="channel-buttons"></div>
+  <div class="now-playing" id="nowPlaying"></div>
 
   <div class="remote-buttons">
     <button id="powerBtn">POWER</button>
@@ -37,6 +35,10 @@
     <button id="pauseBtn">PAUSE</button>
     <button id="rewindBtn"><<</button>
     <button id="fastForwardBtn">>></button>
+  </div>
+
+  <div class="channel-buttons">
+    <!-- Channel buttons will be created here by JS -->
   </div>
 
   <script src="https://www.youtube.com/iframe_api"></script>
