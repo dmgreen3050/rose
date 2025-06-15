@@ -1,14 +1,17 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   font-family: sans-serif;
   text-align: center;
   background-color: black;
+  overflow-x: hidden;
 }
 
-h1 {
-  color: white;
-}
-
-p {
+h1, p {
   color: white;
 }
 
@@ -44,72 +47,36 @@ p {
 #tvPlayer {
   width: 100%;
   height: 100%;
-  max-width: 100%;
-  max-height: 100%;
+  object-fit: contain;
   border: none;
   display: block;
 }
 
-#powerButton {
+#powerButton,
+#channelUp,
+#channelDown,
+#volumeUp,
+#volumeDown {
   position: absolute;
+  height: 8px;
+  background: #6d6d6d;
+  border: none;
+  cursor: pointer;
+  z-index: 4;
+}
+
+#powerButton {
   top: 87.5%;
   left: 40.5%;
   width: 23.2px;
-  height: 8px;
   background: transparent;
-  border: none;
-  cursor: pointer;
-  z-index: 4;
   box-shadow: 0 0 10px #ff0000;
 }
 
-#channelUp {
-  position: absolute;
-  top: 87.5%;
-  left: 53.5%;
-  width: 22.5px;
-  height: 8px;
-  background: #6d6d6d;
-  border: none;
-  cursor: pointer;
-  z-index: 4;
-}
-
-#channelDown {
-  position: absolute;
-  top: 87.5%;
-  left: 57.8%;
-  width: 22.5px;
-  height: 8px;
-  background: #6d6d6d;
-  border: none;
-  cursor: pointer;
-  z-index: 4;
-}
-
-#volumeUp {
-  position: absolute;
-  top: 87.5%;
-  left: 45%;
-  width: 22.5px;
-  height: 8px;
-  background: #6d6d6d;
-  border: none;
-  cursor: pointer;
-  z-index: 4;
-}
-
-#volumeDown {
-  position: absolute;
-  top: 87.5%;
-  left: 49%;
-  width: 23.3px;
-  height: 8px;
-  background: #6d6d6d;
-  border: none;
-  cursor: pointer;
-  z-index: 4;
-}
+#channelUp    { top: 87.5%; left: 53.5%; width: 22.5px; }
+#channelDown  { top: 87.5%; left: 57.8%; width: 22.5px; }
+#volumeUp     { top: 87.5%; left: 45%;   width: 22.5px; }
+#volumeDown   { top: 87.5%; left: 49%;   width: 23.3px; }
 
 .remote {
   margin-top: 20px;
@@ -129,16 +96,17 @@ p {
   top: 55%;
 }
 
-/* ✅ Responsive for phones */
+/* ✅ Responsive mobile fix */
 @media (max-width: 600px) {
   .tv-wrapper {
-    padding: 0;
+    width: 100%;
+    max-width: 100%;
   }
 
   .screen {
     top: 6%;
-    left: 14.5%;
-    width: 71%;
+    left: 15%;
+    width: 70%;
     height: 72.8%;
   }
 
