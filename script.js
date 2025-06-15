@@ -1,46 +1,11 @@
 const channels = [
-  {
-    number: "01",
-    name: "Golden Girls",
-    time: "8:00 PM",
-    youtubePlaylistId: "PLnJVRTZlANm1EyaREpsWbmXRd34Y66yWV"
-  },
-  {
-    number: "02",
-    name: "Christmas Movies",
-    time: "9:00 PM",
-    youtubePlaylistId: "PLnJVRTZlANm28rG20hiPLXHOievQ8O3Ls"
-  },
-  {
-    number: "03",
-    name: "Lifetime",
-    time: "10:00 PM",
-    youtubePlaylistId: "PL7Sv7aQs2p0V1FlyUXXbVGekKW65j5QRq"
-  },
-  {
-    number: "04",
-    name: "Christmas Music",
-    time: "11:00 PM",
-    youtubePlaylistId: "PLiquKSP6s-eFZj2HF0fhw41D5Argpn3_G"
-  },
-  {
-    number: "05",
-    name: "Music",
-    time: "12:00 AM",
-    youtubePlaylistId: "PLnJVRTZlANm3L7JDiPnjIrP2zxEgbdlLJ"
-  },
-  {
-    number: "06",
-    name: "Seinfeld",
-    time: "1:00 AM",
-    youtubePlaylistId: "SEINFELD"
-  },
-  {
-    number: "07",
-    name: "Movies",
-    time: "2:00 AM",
-    youtubePlaylistId: "5fnsIjeByxQ"
-  }
+  { number: "01", name: "Golden Girls", time: "8:00 PM", youtubePlaylistId: "PLnJVRTZlANm1EyaREpsWbmXRd34Y66yWV" },
+  { number: "02", name: "Christmas Movies", time: "9:00 PM", youtubePlaylistId: "PLnJVRTZlANm28rG20hiPLXHOievQ8O3Ls" },
+  { number: "03", name: "Lifetime", time: "10:00 PM", youtubePlaylistId: "PL7Sv7aQs2p0V1FlyUXXbVGekKW65j5QRq" },
+  { number: "04", name: "Christmas Music", time: "11:00 PM", youtubePlaylistId: "PLiquKSP6s-eFZj2HF0fhw41D5Argpn3_G" },
+  { number: "05", name: "Music", time: "12:00 AM", youtubePlaylistId: "PLnJVRTZlANm3L7JDiPnjIrP2zxEgbdlLJ" },
+  { number: "06", name: "Seinfeld", time: "1:00 AM", youtubePlaylistId: "SEINFELD" },
+  { number: "07", name: "Movies", time: "2:00 AM", youtubePlaylistId: "5fnsIjeByxQ" }
 ];
 
 let player;
@@ -49,7 +14,6 @@ let isMuted = false;
 
 const tvGuide = document.getElementById('tvGuide');
 
-// Populate TV guide dynamically
 channels.forEach((ch, i) => {
   const btn = document.createElement('div');
   btn.classList.add('channel-item');
@@ -69,7 +33,6 @@ function updateGuideHighlight() {
   });
 }
 
-// YouTube API global function
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('tvPlayer', {
     height: '100%',
@@ -93,7 +56,6 @@ function switchChannel(index) {
   currentChannel = index;
   updateGuideHighlight();
   const ch = channels[index];
-
   if (!player) return;
 
   if (ch.youtubePlaylistId.length > 10) {
@@ -103,7 +65,7 @@ function switchChannel(index) {
   }
 }
 
-// Control buttons wiring
+// Control buttons
 document.getElementById('powerBtn').addEventListener('click', () => {
   if(player && player.getPlayerState() !== YT.PlayerState.ENDED){
     if(player.isMuted()) player.unMute();
@@ -170,5 +132,5 @@ document.getElementById('fastForwardBtn').addEventListener('click', () => {
 });
 
 function onPlayerStateChange(event) {
-  // Optional: handle player state changes here
+  // Optional: handle state changes here if needed
 }
