@@ -4,11 +4,7 @@ body {
   background-color: black;
 }
 
-h1 {
-  color: white;
-}
-
-p {
+h1, p {
   color: white;
 }
 
@@ -17,6 +13,8 @@ p {
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
+  padding: 0 10px;
+  box-sizing: border-box;
 }
 
 .tv-frame {
@@ -35,11 +33,9 @@ p {
   height: 72.8%;
   overflow: hidden;
   background: black;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   z-index: 1;
 }
 
@@ -65,53 +61,24 @@ p {
   box-shadow: 0 0 10px #ff0000;
 }
 
-#channelUp {
-  position: absolute;
-  top: 87.5%;
-  left: 53.5%;
-  width: 22.5px;
-  height: 8px;
-  background: #6d6d6d;
-  border: none;
-  cursor: pointer;
-  z-index: 4;
-}
-
-#channelDown {
-  position: absolute;
-  top: 87.5%;
-  left: 57.8%;
-  width: 22.5px;
-  height: 8px;
-  background: #6d6d6d;
-  border: none;
-  cursor: pointer;
-  z-index: 4;
-}
-
-#volumeUp {
-  position: absolute;
-  top: 87.5%;
-  left: 45%;
-  width: 22.5px;
-  height: 8px;
-  background: #6d6d6d;
-  border: none;
-  cursor: pointer;
-  z-index: 4;
-}
-
+#channelUp,
+#channelDown,
+#volumeUp,
 #volumeDown {
   position: absolute;
   top: 87.5%;
-  left: 49%;
-  width: 23.3px;
+  width: 22.5px;
   height: 8px;
   background: #6d6d6d;
   border: none;
   cursor: pointer;
   z-index: 4;
 }
+
+#channelUp { left: 53.5%; }
+#channelDown { left: 57.8%; }
+#volumeUp { left: 45%; }
+#volumeDown { left: 49%; }
 
 .remote {
   margin-top: 20px;
@@ -133,23 +100,18 @@ p {
 
 /* Responsive for phones and smaller screens */
 @media (max-width: 600px) {
-  .tv-wrapper {
-    padding: 0 10px; /* added padding to contain .screen */
-  }
   .screen {
-    position: absolute;
     top: 5%;
-    left: 0;
-    width: 100%;
-    height: 50vw; /* maintains aspect ratio */
+    left: 10px;
+    right: 10px;
+    width: auto;
+    height: 50vw;
     overflow: hidden;
     background: black;
-
     display: flex;
     justify-content: center;
     align-items: center;
-
-    box-sizing: border-box; /* prevent overflow from padding */
+    box-sizing: border-box;
   }
 
   #powerButton,
@@ -171,4 +133,3 @@ p {
     top: auto;
   }
 }
-
