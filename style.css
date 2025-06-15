@@ -7,63 +7,57 @@
 
 body {
   background-color: #000;
-  color: #ddd;
+  color: #0f0;
   font-family: 'Courier New', Courier, monospace;
   text-align: center;
   padding: 20px;
   user-select: none;
 }
 
-h1 {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-  color: #eee;
-  text-shadow: 0 0 6px #444;
-}
-
-p {
-  margin-bottom: 30px;
-  font-size: 1.2rem;
-  color: #aaa;
-}
-
 /* TV wrapper & screen */
 .tv-wrapper {
   position: relative;
-  width: 660px;
-  max-width: 95vw;
+  width: 90vw;
+  max-width: 660px;
   margin: 0 auto 40px;
-  user-select: none;
 }
 
 .screen {
   position: relative;
-  background: #222;
   width: 100%;
-  max-width: 640px;
-  height: 360px;
-  margin: 0 auto 20px;
-  border: 12px solid #444;
-  box-shadow: inset 0 0 30px #111;
-  border-radius: 12px;
+  aspect-ratio: 16 / 9;
+  background: #111;
+  border: 10px solid #444;
+  box-shadow: 0 0 30px #0f0;
+  border-radius: 10px;
   overflow: hidden;
+  margin-bottom: 20px;
 }
 
-#tvPlayer, #nonYoutubePlayer {
+#tvPlayerWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+#tvPlayer,
+#nonYoutubePlayer {
+  position: absolute;
+  top: 0; left: 0;
   width: 100%;
   height: 100%;
   display: block;
-  background: #000;
 }
 
 /* Retro TV frame image */
 .tv-frame {
-  width: 660px;
-  max-width: 95vw;
-  margin: -360px auto 20px; /* overlaps screen nicely */
+  width: 100%;
+  max-width: 660px;
+  margin: -360px auto 20px;
   pointer-events: none;
   user-select: none;
-  filter: grayscale(50%) brightness(0.8);
+  position: relative;
+  z-index: 10;
 }
 
 /* TV buttons on the TV itself */
@@ -71,126 +65,41 @@ p {
   display: flex;
   justify-content: center;
   gap: 12px;
-  margin-top: -20px;
+  margin-top: -10px;
   user-select: none;
+  z-index: 20;
+  position: relative;
 }
 
 .tv-buttons button {
-  width: 50px;
-  height: 30px;
-  background-color: #333;
-  border: 2px solid #666;
+  width: 70px;
+  height: 35px;
+  background-color: #111;
+  border: 2px solid #0f0;
   border-radius: 6px;
   cursor: pointer;
-  color: #eee;
+  color: #0f0;
   font-weight: bold;
-  box-shadow: inset 0 2px 4px #555;
   transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
 }
 
 .tv-buttons button:hover,
 .tv-buttons button:focus {
-  background-color: #555;
-  color: #cfc;
+  background-color: #0f0;
+  color: #000;
   outline: none;
-  box-shadow: 0 0 10px #8f8;
+  box-shadow: 0 0 10px #0f0;
 }
 
-/* Remote buttons below the TV */
-.remote-buttons {
-  margin-bottom: 30px;
-  user-select: none;
-}
-
-.remote-buttons button {
-  background-color: #333;
-  border: 2px solid #666;
-  color: #eee;
-  padding: 10px 16px;
-  margin: 5px;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: inset 0 2px 5px #555;
-  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
-  min-width: 90px;
-}
-
-.remote-buttons button:hover,
-.remote-buttons button:focus {
-  background-color: #555;
-  color: #cfc;
-  outline: none;
-  box-shadow: 0 0 12px #8f8;
-}
-
-/* TV Guide container */
-.remote {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 14px;
-  max-width: 700px;
-  margin: 0 auto 40px;
-  background-color: #111;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 12px #222;
-  font-family: 'Courier New', Courier, monospace;
-  user-select: none;
-}
-
-/* Channel buttons in the guide */
-.remote button {
-  background: #222;
-  border: 2px solid #555;
-  color: #eee;
-  padding: 12px 18px;
-  font-size: 1rem;
-  cursor: pointer;
-  border-radius: 6px;
-  min-width: 130px;
-  text-align: left;
-  box-shadow: inset 0 2px 5px #444;
-  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  user-select: none;
-}
-
-/* Add a subtle channel number style */
-.remote button .channel-num {
-  font-weight: 700;
-  color: #9f9;
-  min-width: 25px;
-  text-align: right;
-  font-size: 0.9rem;
-  user-select: none;
-}
-
-/* Hover and focus for guide buttons */
-.remote button:hover,
-.remote button:focus {
-  background: #444;
-  color: #cfc;
-  outline: none;
-  box-shadow: 0 0 15px #8f8;
-}
-
-/* Responsive for small screens */
-@media (max-width: 500px) {
-  .tv-wrapper {
-    width: 95vw;
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .tv-buttons button {
+    width: 50px;
+    height: 28px;
+    font-size: 0.8rem;
   }
+
   .tv-frame {
-    width: 95vw;
-    margin-top: -320px; /* adjust overlap for mobile */
-    filter: grayscale(70%) brightness(0.6);
+    margin: -220px auto 20px;
   }
-  .screen {
-    max-width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 9;
-  }
-  .remote {
-    grid-template-columns: 1fr;
+}
