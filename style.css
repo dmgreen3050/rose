@@ -1,3 +1,4 @@
+/* Reset and base */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -25,7 +26,7 @@ body {
   top: 13.5%;
   left: 12.5%;
   width: 75%;
-  height: 70%;
+  height: 75%; /* slightly taller */
   background: black;
   overflow: hidden;
   border-radius: 8px;
@@ -39,12 +40,15 @@ body {
   z-index: 1;
 }
 
-#tvPlayer, #nonYoutubePlayer {
+#tvPlayer, 
+#nonYoutubePlayer {
   position: absolute;
-  top: 0; left: 0;
+  top: 0; 
+  left: 0;
   width: 100%;
   height: 100%;
   border: none;
+  object-fit: cover; /* fill nicely */
 }
 
 #nonYoutubePlayer {
@@ -58,7 +62,7 @@ body {
   pointer-events: none;
 }
 
-/* Remote */
+/* Remote Buttons */
 .remote-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -93,6 +97,7 @@ body {
   font-size: 14px;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .channel-buttons button.active {
@@ -100,13 +105,4 @@ body {
 }
 
 @media (max-width: 600px) {
-  .tv-wrapper {
-    max-width: 95vw;
-  }
-
-  .remote-buttons,
-  .channel-buttons {
-    flex-direction: column;
-    gap: 8px;
-  }
-}
+  .tv-wrapp
