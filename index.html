@@ -2,14 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Retro TV Web App</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Retro TV</title>
   <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
 </head>
 <body>
 
   <div class="tv-wrapper">
+    <img class="tv-frame" src="TVRETRO.png" alt="TV Frame" />
     <div class="tv-screen">
       <div id="tvPlayerWrapper">
         <iframe
@@ -26,13 +27,12 @@
 
   <div class="channel-buttons"></div>
 
-  <!-- Remote Buttons -->
   <div class="remote-buttons">
-    <button id="powerBtn">Power On/Off</button>
-    <button id="volUpBtn">Volume +</button>
-    <button id="volDownBtn">Volume -</button>
-    <button id="channelUpBtn">Channel +</button>
-    <button id="channelDownBtn">Channel -</button>
+    <button id="powerBtn">Power</button>
+    <button id="volUpBtn">Vol +</button>
+    <button id="volDownBtn">Vol -</button>
+    <button id="channelUpBtn">CH +</button>
+    <button id="channelDownBtn">CH -</button>
   </div>
 
   <script src="app.js"></script>
