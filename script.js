@@ -19,13 +19,12 @@ const channelDownBtn = document.getElementById('channelDownBtn');
 
 let currentChannelIndex = 0;
 let isPowerOn = true;
-let currentVolume = 50; // default volume percent
+let currentVolume = 50; // volume percent, for future use if API is integrated
 
 // Create channel buttons dynamically
 channels.forEach(channel => {
   const btn = document.createElement('button');
   btn.textContent = `${channel.number} - ${channel.name}`;
-  btn.dataset.playlistId = channel.youtubePlaylistId;
   channelButtonsContainer.appendChild(btn);
 });
 
@@ -54,25 +53,11 @@ function loadChannel(index) {
     // Playlist
     src = `https://www.youtube.com/embed/videoseries?list=${playlistId}&autoplay=1&controls=0&loop=1&mute=0&playsinline=1`;
   } else {
-    // Other cases (like SEINFELD)
+    // Other (like SEINFELD)
     src = `https://www.youtube.com/embed/videoseries?list=${playlistId}&autoplay=1&controls=0&loop=1&mute=0&playsinline=1`;
   }
 
   tvPlayer.src = src;
-  setTimeout(() => {
-    setVolume(currentVolume);
-  }, 1000); // try to set volume after iframe loads
-}
-
-function setVolume(volumePercent) {
-  // YouTube iframe does NOT allow volume control by default without API integration.
-  // So this is a best-effort approach, but volume control might not fully work.
-  // Alternative: Use YouTube Iframe API for better control (more complex).
-
-  currentVolume = Math.min(Math.max(volumePercent, 0), 100);
-
-  // For muted autoplay, volume control is tricky; keeping muted off here
-  // So for now, just remember the volume for future toggling.
 }
 
 function togglePower() {
@@ -95,14 +80,16 @@ function channelDown() {
 }
 
 function volumeUp() {
-  setVolume(currentVolume + 10);
+  currentVolume = Math.min(currentVolume + 10, 100);
+  alert(`Volume: ${currentVolume}% (Note: real volume control not supported)`);
 }
 
 function volumeDown() {
-  setVolume(currentVolume - 10);
+  currentVolume = Math.max(currentVolume - 10, 0);
+  alert(`Volume: ${currentVolume}% (Note: real volume control not supported)`);
 }
 
-// Button click handlers
+// Event listeners
 channelButtons.forEach((button, idx) => {
   button.addEventListener('click', () => {
     loadChannel(idx);
@@ -115,5 +102,5 @@ volDownBtn.addEventListener('click', volumeDown);
 channelUpBtn.addEventListener('click', channelUp);
 channelDownBtn.addEventListener('click', channelDown);
 
-// Initialize first channel on page load
+// Initialize first channel
 loadChannel(currentChannelIndex);
